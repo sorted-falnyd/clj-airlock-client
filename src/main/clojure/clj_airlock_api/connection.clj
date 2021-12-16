@@ -177,6 +177,9 @@
   (-start! [this])
   (-stop! [this]))
 
+(defprotocol ISubscribe
+  (-subscribe! [this app path]))
+
 (defrecord Connection
     [ship
      uri
@@ -210,7 +213,11 @@
   (-poke [_ app mark json] (-poke ship uri app mark json))
 
   IAck
-  (-ack [_ event-id] (-put ship uri (action/ack event-id))))
+  (-ack [_ event-id] (-put ship uri (action/ack event-id)))
+
+  ISubscribe
+  (-subscribe! [_ app path]
+    (-put ship uri (action/subscribe (:ship-name ship) app path))))
 
 (defn -channel-name [] (System/currentTimeMillis))
 
