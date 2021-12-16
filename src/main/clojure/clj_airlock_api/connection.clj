@@ -79,13 +79,11 @@
 
   IShip
   (-login! [this]
-    (let [r (-login-request (assoc this :code code))]
-      (log/debug "Login request:" r)
-      (let [resp (http/send! client r (bh/of-string))]
-        (log/debug "Login response:" resp)
-        (cond-> this
-          (not (http/failed? resp))
-          (assoc :cookie (extract-cookie resp))))))
+    (let [r (-login-request (assoc this :code code))
+          resp (-request this r)]
+      (cond-> this
+        (not (http/failed? resp))
+        (assoc :cookie (extract-cookie resp)))))
 
   IClient
 
