@@ -180,6 +180,12 @@
 (defprotocol ISubscribe
   (-subscribe! [this app path]))
 
+(defprotocol IUnsubscribe
+  (-unsubscribe! [this subscription]))
+
+(defprotocol IDelete
+  (-delete! [this]))
+
 (defrecord Connection
     [ship
      uri
@@ -217,7 +223,13 @@
 
   ISubscribe
   (-subscribe! [_ app path]
-    (-put ship uri (action/subscribe (:ship-name ship) app path))))
+    (-put ship uri (action/subscribe (:ship-name ship) app path)))
+
+  IUnsubscribe
+  (-unsubscribe! [_ subscription] (-put ship uri (action/unsubscribe subscription)))
+
+  IUnsubscribe
+  (-delete! [_] (-put ship uri (action/delete))))
 
 (defn -channel-name [] (System/currentTimeMillis))
 
@@ -242,10 +254,7 @@
 
 (comment
   (def tot (-> {} make-ship login! make-connection -build! -start!))
-  (def ship (login! (make-ship)))
-  (def conn (make-connection ship {}))
-  (def conn' (-build! conn))
-  (def conn'' (-start! conn'))
+  (-subscribe! tot "graph-store" "/updates")
   )
 
 
