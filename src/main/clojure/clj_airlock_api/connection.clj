@@ -134,19 +134,9 @@
          client (or client (http/client))]
      (Ship. uri ship-name client nil code))))
 
-(comment
-  (def ship (make-ship)))
-
 (defn login!
   ([ship] (-login! ship))
   ([ship code] (-> ship (assoc :code code) -login!)))
-
-(comment
-  (-> {:uri "http://localhost"
-       :port 8080
-       :ship-name "zod"}
-      make-ship
-      (login! "lidlut-tabwed-pillex-ridrup")))
 
 (defn -on-subscribe
   [_this state]
