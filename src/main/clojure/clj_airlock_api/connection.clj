@@ -70,6 +70,11 @@
   (-put-async [this uri body])
   (-post-async [this uri body]))
 
+(defprotocol IntoRequest
+  (-into-put [this body] [this uri body])
+  (-into-get [this] [this uri])
+  (-into-post [this body] [this uri body]))
+
 ;;; Lifecycle
 
 (defprotocol IShip
@@ -101,6 +106,41 @@
         (not (http/failed? resp))
         (assoc :cookie (extract-cookie resp)))))
 
+  IntoRequest
+  (-into-put [_ body]
+    {:body body
+     :uri uri
+     :method :put
+     :headers {"Cookie" cookie}})
+
+  (-into-put [_ uri body]
+    {:body body
+     :uri uri
+     :method :put
+     :headers {"Cookie" cookie}})
+
+  (-into-post [_ body]
+    {:body body
+     :uri uri
+     :method :post
+     :headers {"Cookie" cookie}})
+
+  (-into-post [_ uri body]
+    {:body body
+     :uri uri
+     :method :post
+     :headers {"Cookie" cookie}})
+
+  (-into-get [_]
+    {:uri uri
+     :method :get
+     :headers {"Cookie" cookie}})
+
+  (-into-get [_ uri]
+    {:uri uri
+     :method :get
+     :headers {"Cookie" cookie}})
+
   IAsyncClient
   (-request-async [_ request]
     (http/send-async!
@@ -109,20 +149,10 @@
      (bh/of-byte-array)))
 
   (-put-async [this uri body]
-    (-request-async
-     this
-     {:body body
-      :uri uri
-      :method :put
-      :headers {"Cookie" cookie}}))
+    (-request-async this (-into-put this uri body)))
 
   (-post-async [this uri body]
-    (-request-async
-     this
-     {:body body
-      :uri uri
-      :method :post
-      :headers {"Cookie" cookie}}))
+    (-request-async this (-into-post this uri body)))
 
   IClient
 
@@ -137,12 +167,7 @@
       resp))
 
   (-put [this uri body]
-    (-request
-     this
-     {:body body
-      :uri uri
-      :method :put
-      :headers {"Cookie" cookie}}))
+    (-request this (-into-put this uri body)))
 
   action/IPoke
   (-poke! [this uri app mark json]
@@ -233,7 +258,7 @@
       {})))
 
   (-start! [this]
-    (.get (action/poke! ship uri "hood" "helm-hi" "Opening airlock, welcome to Mars."))
+    (.get (action/poke! this "hood" "helm-hi" "Opening airlock, welcome to Mars."))
     (assoc this :subscription (sse/connect sse-connection)))
 
   (-stop! [this] (.close subscription) this)
@@ -246,14 +271,22 @@
 
   action/ISubscribe
   (-subscribe! [_ app path]
-    (-put-async ship uri (action/subscribe (:ship-name ship) app path)))
+    (->> (action/subscribe (:ship-name ship) app path)
+         (-into-put ship uri)
+         (-request-async ship)))
 
   action/IUnsubscribe
   (-unsubscribe! [_ subscription]
-    (-put-async ship uri (action/unsubscribe subscription)))
+    (->> subscription
+         action/unsubscribe
+         (-into-put ship uri)
+         (-request-async ship)))
 
   action/IDelete
-  (-delete! [_] (-put-async ship uri (action/delete))))
+  (-delete! [_]
+    (->> (action/delete)
+         (-into-put ship uri)
+         (-request-async ship))))
 
 (defn -channel-name [] (System/currentTimeMillis))
 
