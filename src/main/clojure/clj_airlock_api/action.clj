@@ -42,6 +42,15 @@
    :ship ship-name
    :json json})
 
+(defprotocol IPoke
+  (-poke! [this app mark json] [this uri app mark json]))
+
+(defn poke!
+  ([this app mark json]
+   (-poke! this app mark json))
+  ([this uri app mark json]
+   (-poke! this uri app mark json)))
+
 ;;; SUBSCRIBE
 
 (s/def :subscribe/action #{:subscribe})
@@ -65,6 +74,13 @@
    :app app
    :path path})
 
+(defprotocol ISubscribe
+  (-subscribe! [this app path]))
+
+(defn subscribe!
+  [this app path]
+  (-subscribe! this app path))
+
 ;;; ACK
 
 (s/def :ack/action #{:ack})
@@ -82,6 +98,13 @@
   {:event-id event-id
    :id (counter)
    :action :ack})
+
+(defprotocol IAck
+  (-ack! [this event-id]))
+
+(defn ack!
+  [this event-id]
+  (-ack! this event-id))
 
 ;;; UNSUBSCRIBE
 
@@ -101,6 +124,13 @@
    :action :unsubscribe
    :subscription subscription})
 
+(defprotocol IUnsubscribe
+  (-unsubscribe! [this subscription]))
+
+(defn unsubscribe!
+  [this subscription]
+  (-unsubscribe! this subscription))
+
 ;;; DELETE
 
 (s/def :delete/action #{:delete})
@@ -113,3 +143,10 @@
   []
   {:id (counter)
    :action :delete})
+
+(defprotocol IDelete
+  (-delete! [this]))
+
+(defn delete!
+  [this]
+  (-delete! this))

@@ -9,6 +9,8 @@
    [clj-sse-client.client :as http]
    [clj-airlock-api.action :as action])
   (:import
+   #_(java.util.function BiFunction)
+   #_(java.util.concurrent CompletableFuture)
    (java.util.concurrent.atomic AtomicInteger)))
 
 (defonce counter (let [i (AtomicInteger. 0)] (fn [] (.incrementAndGet i))))
@@ -57,18 +59,32 @@
   (s/keys :req-un [::http/uri ::ship-name]
           :opt-un [::http/client ::cookie]))
 
+;;; HTTP Client behavior
+
+(defprotocol IClient
+  (-request [this request])
+  (-put [this uri body]))
+
+(defprotocol IAsyncClient
+  (-request-async [this request])
+  (-put-async [this uri body])
+  (-post-async [this uri body]))
+
+;;; Lifecycle
+
 (defprotocol IShip
   (-login! [ship]))
 
-(defprotocol IClient
-  (-request [this request] [this request handler])
-  (-put [this uri body]))
+(defprotocol IConnection
+  (-build! [this])
+  (-start! [this])
+  (-stop! [this]))
 
-(defprotocol IPoke
-  (-poke [this app mark json] [this uri app mark json]))
+;;; Implementation
 
-(defprotocol IAck
-  (-ack [this event-id]))
+(defn ensure-body-format
+  [{:keys [body] :as request}]
+  (cond-> request body (assoc :body (-into-request-format body))))
 
 (defrecord Ship
     [^::http/uri uri
@@ -85,17 +101,38 @@
         (not (http/failed? resp))
         (assoc :cookie (extract-cookie resp)))))
 
+  IAsyncClient
+  (-request-async [_ request]
+    (http/send-async!
+     client
+     (ensure-body-format request)
+     (bh/of-byte-array)))
+
+  (-put-async [this uri body]
+    (-request-async
+     this
+     {:body body
+      :uri uri
+      :method :put
+      :headers {"Cookie" cookie}}))
+
+  (-post-async [this uri body]
+    (-request-async
+     this
+     {:body body
+      :uri uri
+      :method :post
+      :headers {"Cookie" cookie}}))
+
   IClient
 
-  (-request [this request] (-request this request (bh/of-string)))
-
-  (-request [_ {:keys [body] :as request} handler]
+  (-request [_ request]
     (log/debug "Request:" request)
     (let [resp
           (http/send!
            client
-           (cond-> request body (assoc :body (-into-request-format body)))
-           handler)]
+           (ensure-body-format request)
+           (bh/of-byte-array))]
       (log/debug "Response:" resp)
       resp))
 
@@ -107,9 +144,9 @@
       :method :put
       :headers {"Cookie" cookie}}))
 
-  IPoke
-  (-poke [this uri app mark json]
-    (-put this uri (action/poke mark app ship-name json))))
+  action/IPoke
+  (-poke! [this uri app mark json]
+    (-put-async this uri (action/poke mark app ship-name json))))
 
 (defn ensure-port
   [uri port]
@@ -152,7 +189,7 @@
   [this eff]
   (let [data (json/read-value (:data eff) json/keyword-keys-object-mapper)]
     (log/debug data)
-    (log/debug (-ack this (:id data)))
+    (action/ack! this (:id data))
     true))
 
 (def default-callbacks
@@ -171,20 +208,6 @@
            ([x] (f this x))
            ([x y] (f this x y)))]))
    callbacks))
-
-(defprotocol IConnection
-  (-build! [this])
-  (-start! [this])
-  (-stop! [this]))
-
-(defprotocol ISubscribe
-  (-subscribe! [this app path]))
-
-(defprotocol IUnsubscribe
-  (-unsubscribe! [this subscription]))
-
-(defprotocol IDelete
-  (-delete! [this]))
 
 (defrecord Connection
     [ship
@@ -210,26 +233,27 @@
       {})))
 
   (-start! [this]
-    (-poke ship uri "hood" "helm-hi" "Opening airlock, welcome to Mars.")
+    (.get (action/poke! ship uri "hood" "helm-hi" "Opening airlock, welcome to Mars."))
     (assoc this :subscription (sse/connect sse-connection)))
 
   (-stop! [this] (.close subscription) this)
 
-  IPoke
-  (-poke [_ app mark json] (-poke ship uri app mark json))
+  action/IPoke
+  (-poke! [_ app mark json] (action/poke! ship uri app mark json))
 
-  IAck
-  (-ack [_ event-id] (-put ship uri (action/ack event-id)))
+  action/IAck
+  (-ack! [_ event-id] (-put-async ship uri (action/ack event-id)))
 
-  ISubscribe
+  action/ISubscribe
   (-subscribe! [_ app path]
-    (-put ship uri (action/subscribe (:ship-name ship) app path)))
+    (-put-async ship uri (action/subscribe (:ship-name ship) app path)))
 
-  IUnsubscribe
-  (-unsubscribe! [_ subscription] (-put ship uri (action/unsubscribe subscription)))
+  action/IUnsubscribe
+  (-unsubscribe! [_ subscription]
+    (-put-async ship uri (action/unsubscribe subscription)))
 
-  IUnsubscribe
-  (-delete! [_] (-put ship uri (action/delete))))
+  action/IDelete
+  (-delete! [_] (-put-async ship uri (action/delete))))
 
 (defn -channel-name [] (System/currentTimeMillis))
 
@@ -254,7 +278,8 @@
 
 (comment
   (def tot (-> {} make-ship login! make-connection -build! -start!))
-  (-subscribe! tot "graph-store" "/updates")
+  (def r (action/subscribe! tot "graph-store" "/updates"))
+  (.get r)
   )
 
 
