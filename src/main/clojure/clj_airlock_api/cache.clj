@@ -7,7 +7,7 @@
 
 (defprotocol IPromiseCache
   (-promise! [this id])
-  (-deliver! [this id]))
+  (-deliver! [this id v]))
 
 (defn ->Cache
   "Create a cache with `deliver!` function which delivers results to a
@@ -23,6 +23,7 @@
       (-remove! [this id] (swap! a dissoc id))
       IPromiseCache
       (-promise! [this id] (let [p (pf)] (-add! this id p)))
-      (-deliver! [this id]
-        (deliver! (-get! this id))
-        (-remove! this id)))))
+      (-deliver! [this id v]
+        (when-let [p (-get! this id)]
+          (deliver! p v)
+          (-remove! this id))))))
