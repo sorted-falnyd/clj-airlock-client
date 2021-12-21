@@ -62,9 +62,8 @@
 (defmethod action-spec :subscribe [_] :action/subscribe)
 
 (defn subscribe
-  [ship app path]
+  [app path]
   {:action :subscribe
-   :ship ship
    :app app
    :path path})
 
