@@ -34,13 +34,17 @@
 (defmethod action-spec :poke [_] :action/poke)
 
 (defn poke
-  [mark app ship-name json]
-  {:id (counter)
-   :action :poke
-   :mark mark
-   :app app
-   :ship ship-name
-   :json json})
+  ([app mark json]
+   {:action :poke
+    :mark mark
+    :app app
+    :json json})
+  ([ship-name app mark json]
+   {:action :poke
+    :mark mark
+    :app app
+    :ship ship-name
+    :json json}))
 
 (defprotocol IPoke
   (-poke! [this app mark json] [this uri app mark json]))
@@ -68,8 +72,7 @@
 
 (defn subscribe
   [ship app path]
-  {:id (counter)
-   :action :subscribe
+  {:action :subscribe
    :ship ship
    :app app
    :path path})
@@ -96,7 +99,6 @@
 (defn ack
   [event-id]
   {:event-id event-id
-   :id (counter)
    :action :ack})
 
 (defprotocol IAck
@@ -119,10 +121,9 @@
 (defmethod action-spec :unsubscribe [_] :action/unsubscribe)
 
 (defn unsubscribe
-  [subscription]
-  {:id (counter)
-   :action :unsubscribe
-   :subscription subscription})
+  ([subscription]
+   {:action :unsubscribe
+    :subscription subscription}))
 
 (defprotocol IUnsubscribe
   (-unsubscribe! [this subscription]))
@@ -140,9 +141,9 @@
 (defmethod action-spec :delete [_] :action/delete)
 
 (defn delete
-  []
-  {:id (counter)
-   :action :delete})
+  ([] {:action :delete})
+  ([_] {:action :delete})
+  ([_ & _] {:action :delete}))
 
 (defprotocol IDelete
   (-delete! [this]))
@@ -150,3 +151,28 @@
 (defn delete!
   [this]
   (-delete! this))
+
+;;; Scry
+
+(defn scry
+  [app path]
+  {:action :scry
+   :app app
+   :path path})
+
+;;; Thread
+
+(defn thread
+  ([input-mark output-mark thread-name body]
+   {:action :thread
+    :input-mark input-mark
+    :output-mark output-mark
+    :thread-name thread-name
+    :body body})
+  ([input-mark output-mark thread-name body desk]
+   {:action :thread
+    :input-mark input-mark
+    :output-mark output-mark
+    :thread-name thread-name
+    :desk desk
+    :body body}))
