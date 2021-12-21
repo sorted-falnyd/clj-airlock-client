@@ -2,6 +2,7 @@
  :deps {org.clojure/clojure {:mvn/version "1.10.3"}
         metosin/jsonista {:mvn/version "0.3.5"}
         funcool/promesa {:mvn/version "6.0.2"}
+        org.clojure/core.async {:mvn/version "1.5.648"}
         io.github.sorted-falnyd/clj-sse-client {:mvn/version "0.0.10"}
         org.clojure/tools.logging {:mvn/version "1.2.2"}}
  :aliases
