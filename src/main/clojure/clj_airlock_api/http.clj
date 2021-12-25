@@ -29,11 +29,11 @@
 
 (extend-protocol IntoRequestFormat
   String
-  (-into-request-format [this] this)
+  (-into-request-format [this] (.getBytes this))
   clojure.lang.Sequential
   (-into-request-format [this] (json/write-value-as-bytes this))
   clojure.lang.IPersistentMap
-  (-into-request-format [this] (-into-request-format [this])))
+  (-into-request-format [this] (json/write-value-as-bytes this)))
 
 (defn ensure-body-format
   [{:keys [body] :as request}]
@@ -46,13 +46,13 @@
   {:method :put
    :uri channel-uri
    :headers {"Cookie" cookie}
-   :body (assoc action :ship ship-name)})
+   :body [(assoc action :ship ship-name)]})
 
 (defmethod -into-request :thread
-  [{:keys [input-mark output-mark thread-name body]}
+  [{:keys [input-mark output-mark thread-name body desk]}
    {:keys [uri cookie] :as _actor}]
   {:method :post
-   :uri (str uri "/spider/" input-mark "/" thread-name "/" output-mark)
+   :uri (str uri "/spider/" desk "/" input-mark "/" thread-name "/" output-mark)
    :headers {"Cookie" cookie}
    :body body})
 
