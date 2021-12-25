@@ -126,11 +126,7 @@
 
 (defn thread
   ([input-mark output-mark thread-name body]
-   {:action :thread
-    :input-mark input-mark
-    :output-mark output-mark
-    :thread-name thread-name
-    :body body})
+   (thread input-mark output-mark thread-name body "base"))
   ([input-mark output-mark thread-name body desk]
    {:action :thread
     :input-mark input-mark
