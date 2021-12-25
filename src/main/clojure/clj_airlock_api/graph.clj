@@ -91,13 +91,10 @@
 
 (defn add-nodes
   [ship name nodes]
-  (action/thread
-    (str "graph-update-" graph-update-version)
-    "graph-view-action"
-    "graph-add-nodes"
-    {:add-nodes
-     {:resource (resource (u/ensig ship) name)
-      :nodes nodes}}))
+  (push-hook
+   {:add-nodes
+    {:resource (resource (u/ensig ship) name)
+     :nodes nodes}}))
 
 (defn add-post
   [ship name post]
