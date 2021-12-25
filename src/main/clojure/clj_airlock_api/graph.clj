@@ -145,13 +145,50 @@
 (defn scry [path] (-scry (str "/graph" path)))
 (defn -get [ship name] (scry (str "/" (u/ensig ship) "/" name)))
 
-(defn newest
+(defn -siblings
+  [who ship name count index]
+  (-scry
+   (u/-str
+    "/graph/"
+    (u/ensig ship) "/"
+    name
+    "/node/siblings/"
+    who
+    "/lone/"
+    count
+    index)))
+
+(defn newest-siblings
+  ([ship name count] (newest-siblings ship name count ""))
+  ([ship name count index] (-siblings "newest" ship name count index)))
+
+(defn older-siblings
+  ([ship name count] (older-siblings ship name count ""))
   ([ship name count index]
-   (-scry
-    (u/-str
-     "/graph/"
-     (u/ensig ship) "/"
-     name
-     "/node/siblings/newest/lone/"
-     count
-     (encode-index index)))))
+   (-siblings "older" ship name count (encode-index index))))
+
+(defn younger-siblings
+  ([ship name count]
+   (younger-siblings ship name count))
+  ([ship name count index]
+   (-siblings "younger" ship name count (encode-index index))))
+
+(defn subset
+  [ship name start end]
+  (-scry
+   (u/-str
+    "/graph-subset/"
+    ship "/"
+    name "/"
+    end "/"
+    start)))
+
+(defn node
+  [ship name index]
+  (-scry
+   (u/-str
+    "/graph/"
+    (u/ensig ship) "/"
+    name
+    "/node/index/kith"
+    (encode-index index))))
