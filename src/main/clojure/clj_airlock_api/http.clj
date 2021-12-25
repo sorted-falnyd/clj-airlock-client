@@ -86,6 +86,7 @@
 (defmethod send! :thread [client action] (-send! client action))
 
 (defn handle-sse-response!
-  [{:keys [cache] :as client} {:keys [id] :as response}]
-  (send! client (action/ack id))
-  (cache/-deliver! cache id response))
+  [{:keys [cache] :as client} response]
+  (let [id (get response "id")]
+    (send! client (action/ack id))
+    (cache/-deliver! cache id response)))

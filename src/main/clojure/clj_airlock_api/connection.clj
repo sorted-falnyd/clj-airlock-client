@@ -24,7 +24,7 @@
 
 (defn -on-next
   [this eff]
-  (let [data (json/read-value (:data eff) json/keyword-keys-object-mapper)]
+  (let [data (json/read-value (:data eff))]
     (log/debug data)
     (http/handle-sse-response! this data)
     (a/put! (:channel this) data)
