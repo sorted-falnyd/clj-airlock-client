@@ -26,7 +26,7 @@
 
 (defn push-hook
   [data]
-  (action/poke "graph-push-hook" "graph-update" data))
+  (action/poke "graph-push-hook" graph-update-mark data))
 
 (defn view
   [thread-name action]
