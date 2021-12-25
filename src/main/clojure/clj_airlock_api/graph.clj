@@ -5,11 +5,12 @@
    [clojure.string :as str]))
 
 (defn make-post
-  ([author contents {:keys [parent-index index]
+  ([author contents] (make-post author contents nil))
+  ([author contents {:keys [parent-index index now]
               :or {parent-index ""}}]
-   (let [now (System/currentTimeMillis)
+   (let [now (or now (System/currentTimeMillis))
          index (str parent-index "/" (or index (u/unix->da now)))]
-     {:author author
+     {:author (u/ensig author)
       :index index
       :time-sent now
       :contents contents
