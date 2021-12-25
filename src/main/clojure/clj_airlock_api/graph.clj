@@ -22,10 +22,7 @@
 
 (defn store
   [data]
-  (action/poke
-   "graph-store"
-   (str "graph-update-" graph-update-version)
-   data))
+  (action/poke "graph-store" graph-update-mark data))
 
 (defn push-hook
   [data]
