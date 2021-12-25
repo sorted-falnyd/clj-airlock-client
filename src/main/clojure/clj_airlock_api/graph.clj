@@ -18,6 +18,7 @@
       :hash nil})))
 
 (def graph-update-version 3)
+(def graph-update-mark (str "graph-update-" graph-update-version))
 
 (defn store
   [data]
