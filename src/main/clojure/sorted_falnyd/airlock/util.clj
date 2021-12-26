@@ -1,4 +1,4 @@
-(ns clj-airlock-api.util
+(ns sorted-falnyd.airlock.util
   (:import
    (java.util.concurrent.atomic AtomicInteger))
   (:require [clojure.string :as str]))

@@ -1,4 +1,4 @@
-(ns clj-airlock-api.connection
+(ns sorted-falnyd.airlock.connection
   (:require
    [clojure.tools.logging :as log]
    [jsonista.core :as json]
@@ -6,9 +6,9 @@
    [clojure.core.async :as a]
    [clj-sse-client.sse :as sse]
    [clj-sse-client.client :as client]
-   [clj-airlock-api.action :as action]
-   [clj-airlock-api.http :as http]
-   [clj-airlock-api.cache :as cache]))
+   [sorted-falnyd.airlock.action :as action]
+   [sorted-falnyd.airlock.http :as http]
+   [sorted-falnyd.airlock.cache :as cache]))
 
 ;;; Implementation
 

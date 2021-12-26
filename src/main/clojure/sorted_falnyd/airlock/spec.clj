@@ -1,4 +1,4 @@
-(ns clj-airlock-api.spec
+(ns sorted-falnyd.airlock.spec
   (:require
    [clojure.spec.alpha :as s]
    [clojure.string :as str]))

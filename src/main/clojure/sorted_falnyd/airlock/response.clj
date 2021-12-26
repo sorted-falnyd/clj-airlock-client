@@ -1,7 +1,7 @@
-(ns clj-airlock-api.response
+(ns sorted-falnyd.airlock.response
   (:require
    [clojure.spec.alpha :as s]
-   [clj-airlock-api.spec :as as]))
+   [sorted-falnyd.airlock.spec :as as]))
 
 (s/def :response/id ::as/id)
 (s/def :response/ok string?)

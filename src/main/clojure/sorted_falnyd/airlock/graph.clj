@@ -1,7 +1,7 @@
-(ns clj-airlock-api.graph
+(ns sorted-falnyd.airlock.graph
   (:require
-   [clj-airlock-api.util :as u]
-   [clj-airlock-api.action :as action]
+   [sorted-falnyd.airlock.util :as u]
+   [sorted-falnyd.airlock.action :as action]
    [clojure.string :as str]))
 
 (defn make-post

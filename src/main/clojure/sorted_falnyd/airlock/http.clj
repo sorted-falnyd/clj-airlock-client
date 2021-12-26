@@ -1,11 +1,11 @@
-(ns clj-airlock-api.http
+(ns sorted-falnyd.airlock.http
   (:require
    [jsonista.core :as json]
-   [clj-airlock-api.cache :as cache]
-   [clj-airlock-api.util :as u]
    [clj-sse-client.client :as http]
    [clj-sse-client.body-handler :as bh]
-   [clj-airlock-api.action :as action]))
+   [sorted-falnyd.airlock.cache :as cache]
+   [sorted-falnyd.airlock.util :as u]
+   [sorted-falnyd.airlock.action :as action]))
 
 (defprotocol IClient
   (-request [this request])

@@ -1,4 +1,4 @@
-(ns clj-airlock-api.cache)
+(ns sorted-falnyd.airlock.cache)
 
 (defprotocol ICache
   (-add! [this id p])
@@ -27,3 +27,4 @@
         (when-let [p (-get! this id)]
           (deliver! p v)
           (-remove! this id))))))
+

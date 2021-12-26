@@ -1,4 +1,4 @@
-(ns clj-airlock-api.ship
+(ns sorted-falnyd.airlock.ship
   (:require
    [clj-sse-client.client :as http]
    [clj-sse-client.util :as cu]

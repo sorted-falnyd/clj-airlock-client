@@ -1,7 +1,7 @@
-(ns clj-airlock-api.action
+(ns sorted-falnyd.airlock.action
   (:require
    [clojure.spec.alpha :as s]
-   [clj-airlock-api.spec :as as])
+   [sorted-falnyd.airlock.spec :as as])
   (:import
    (java.util.concurrent.atomic AtomicInteger)))
 
