@@ -25,7 +25,7 @@
 (defn -on-next
   [this eff]
   (let [data (json/read-value (:data eff))]
-    (log/debug data)
+    (log/trace data)
     (http/handle-sse-response! this data)
     (a/put! (:channel this) data)
     true))
