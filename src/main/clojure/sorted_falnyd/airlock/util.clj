@@ -60,3 +60,22 @@
      (if (nil? x) "" (. x (toString))))
     (^String [^Object x & xs]
      (transduce xf sbrf (doto (sbrf) (sbrf x)) xs))))
+
+(defn decode-resource
+  [s]
+  (cond
+
+    (string? s)
+    (let [[_ _ ship group] (str/split s #"/")]
+      (keyword (desig ship) group))
+
+    (map? s)
+    (let [{:keys [name ship]} s] (keyword ship name))))
+
+(defn uri
+  [& args]
+  (java.net.URI/create (apply str args)))
+
+(defn remove-nils
+  [m]
+  (into {} (remove (fn [[_ v]] (nil? v))) m))
