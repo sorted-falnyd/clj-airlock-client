@@ -12,7 +12,7 @@
         datalevin/datalevin {:mvn/version "0.5.27"}
         org.clojars.quoll/asami {:mvn/version "2.2.3"}
 
-        io.github.sorted-falnyd/clj-sse-client {:mvn/version "0.0.10"}
+        io.github.sorted-falnyd/clj-sse-client {:mvn/version "0.0.12"}
         meander/epsilon {:mvn/version "0.0.650"}}
  :aliases
  {:dev
