@@ -66,6 +66,24 @@ incoming messages on the initial subscription channel
 
 Further actions, indexing, etc can be performed by subscribing on it.
 
+## Development
+
+### Schemas
+
+Using typescript-json-schema on the urbit API, emit schemas that can be parsed
+
+```bash
+typescript-json-schema tsconfig.json Graph --refs --aliasRefs --topRef --titles --defaultProps --required --tsNodeRegister   > graph.json
+```
+
+Parse the schema to a basic malli schema
+
+```clojure
+(parse-definitions (json/read-value (slurp "graph.json")))
+```
+
+Merge the registries and parse incoming events
+
 ## License
 
 Copyright © 2021 sorted-falnyd

@@ -16,7 +16,8 @@
         meander/epsilon {:mvn/version "0.0.650"}}
  :aliases
  {:dev
-  {:extra-deps
+  {:extra-paths ["src/dev/clojure" "src/dev/resources"]
+   :extra-deps
    {io.github.sorted-falnyd/clj-sse-client {:local/root "../clj-sse-client"}
     ch.qos.logback/logback-classic {:mvn/version "1.2.7"}}
    :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/slf4j-factory"]}

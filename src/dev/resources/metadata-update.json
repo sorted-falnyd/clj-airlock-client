@@ -1,0 +1,360 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "anyOf": [
+        {
+            "$ref": "#/definitions/MetadataUpdateInitial"
+        },
+        {
+            "$ref": "#/definitions/MetadataUpdateAdd"
+        },
+        {
+            "$ref": "#/definitions/MetadataUpdateUpdate"
+        },
+        {
+            "$ref": "#/definitions/MetadataUpdateRemove"
+        },
+        {
+            "$ref": "#/definitions/MetadataUpdateEdit"
+        }
+    ],
+    "definitions": {
+        "AssociationPoke": {
+            "defaultProperties": [],
+            "properties": {
+                "group": {
+                    "$ref": "#/definitions/Path",
+                    "title": "group"
+                },
+                "metadata": {
+                    "$ref": "#/definitions/Metadata",
+                    "title": "metadata"
+                },
+                "resource": {
+                    "$ref": "#/definitions/MdResource",
+                    "title": "resource"
+                }
+            },
+            "required": [
+                "group",
+                "metadata",
+                "resource"
+            ],
+            "title": "AssociationPoke",
+            "type": "object"
+        },
+        "GraphConfig": {
+            "defaultProperties": [],
+            "properties": {
+                "graph": {
+                    "title": "graph",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "graph"
+            ],
+            "title": "GraphConfig",
+            "type": "object"
+        },
+        "GroupConfig": {
+            "defaultProperties": [],
+            "properties": {
+                "group": {
+                    "anyOf": [
+                        {
+                            "properties": {},
+                            "type": "object"
+                        },
+                        {
+                            "$ref": "#/definitions/MdResource"
+                        }
+                    ],
+                    "title": "group"
+                }
+            },
+            "required": [
+                "group"
+            ],
+            "title": "GroupConfig",
+            "type": "object"
+        },
+        "MdAppName": {
+            "enum": [
+                "graph",
+                "groups"
+            ],
+            "title": "MdAppName",
+            "type": "string"
+        },
+        "MdResource": {
+            "defaultProperties": [],
+            "properties": {
+                "app-name": {
+                    "$ref": "#/definitions/MdAppName",
+                    "title": "app-name"
+                },
+                "resource": {
+                    "title": "resource",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "app-name",
+                "resource"
+            ],
+            "title": "MdResource",
+            "type": "object"
+        },
+        "Metadata": {
+            "defaultProperties": [],
+            "properties": {
+                "color": {
+                    "title": "color",
+                    "type": "string"
+                },
+                "config": {
+                    "$ref": "#/definitions/Metadata.C",
+                    "title": "config"
+                },
+                "creator": {
+                    "$ref": "#/definitions/Patp",
+                    "title": "creator"
+                },
+                "date-created": {
+                    "title": "date-created",
+                    "type": "string"
+                },
+                "description": {
+                    "title": "description",
+                    "type": "string"
+                },
+                "hidden": {
+                    "title": "hidden",
+                    "type": "boolean"
+                },
+                "picture": {
+                    "title": "picture",
+                    "type": "string"
+                },
+                "preview": {
+                    "title": "preview",
+                    "type": "boolean"
+                },
+                "title": {
+                    "title": "title",
+                    "type": "string"
+                },
+                "vip": {
+                    "$ref": "#/definitions/PermVariation",
+                    "title": "vip"
+                }
+            },
+            "required": [
+                "color",
+                "config",
+                "creator",
+                "date-created",
+                "description",
+                "hidden",
+                "picture",
+                "preview",
+                "title",
+                "vip"
+            ],
+            "title": "Metadata",
+            "type": "object"
+        },
+        "Metadata.C": {
+            "anyOf": [
+                {
+                    "$ref": "#/definitions/GroupConfig"
+                },
+                {
+                    "$ref": "#/definitions/GraphConfig"
+                }
+            ],
+            "title": "Metadata.C"
+        },
+        "MetadataEditField": {
+            "$ref": "#/definitions/__type_4"
+        },
+        "MetadataUpdateAdd": {
+            "$ref": "#/definitions/__type_1"
+        },
+        "MetadataUpdateEdit": {
+            "defaultProperties": [],
+            "properties": {
+                "edit": {
+                    "defaultProperties": [],
+                    "properties": {
+                        "edit": {
+                            "$ref": "#/definitions/MetadataEditField",
+                            "title": "edit"
+                        },
+                        "group": {
+                            "title": "group",
+                            "type": "string"
+                        },
+                        "resource": {
+                            "$ref": "#/definitions/MdResource",
+                            "title": "resource"
+                        }
+                    },
+                    "required": [
+                        "edit",
+                        "group",
+                        "resource"
+                    ],
+                    "title": "edit",
+                    "type": "object"
+                }
+            },
+            "required": [
+                "edit"
+            ],
+            "title": "MetadataUpdateEdit",
+            "type": "object"
+        },
+        "MetadataUpdateInitial": {
+            "defaultProperties": [],
+            "properties": {
+                "associations": {
+                    "$ref": "#/definitions/ResourceAssociations",
+                    "title": "associations"
+                }
+            },
+            "required": [
+                "associations"
+            ],
+            "title": "MetadataUpdateInitial",
+            "type": "object"
+        },
+        "MetadataUpdateRemove": {
+            "$ref": "#/definitions/__type_3"
+        },
+        "MetadataUpdateUpdate": {
+            "$ref": "#/definitions/__type_2"
+        },
+        "Path": {
+            "title": "Path",
+            "type": "string"
+        },
+        "Patp": {
+            "title": "Patp",
+            "type": "string"
+        },
+        "PermVariation": {
+            "enum": [
+                "",
+                " ",
+                "admin-feed",
+                "host-feed",
+                "member-metadata",
+                "reader-comments"
+            ],
+            "title": "PermVariation",
+            "type": "string"
+        },
+        "ResourceAssociations": {
+            "$ref": "#/definitions/__type"
+        },
+        "__type": {
+            "defaultProperties": [],
+            "title": "__type",
+            "type": "object"
+        },
+        "__type_1": {
+            "defaultProperties": [],
+            "properties": {
+                "add": {
+                    "$ref": "#/definitions/AssociationPoke",
+                    "title": "add"
+                }
+            },
+            "required": [
+                "add"
+            ],
+            "title": "__type_1",
+            "type": "object"
+        },
+        "__type_2": {
+            "defaultProperties": [],
+            "properties": {
+                "update": {
+                    "$ref": "#/definitions/AssociationPoke",
+                    "title": "update"
+                }
+            },
+            "required": [
+                "update"
+            ],
+            "title": "__type_2",
+            "type": "object"
+        },
+        "__type_3": {
+            "defaultProperties": [],
+            "properties": {
+                "remove": {
+                    "defaultProperties": [],
+                    "properties": {
+                        "group": {
+                            "title": "group",
+                            "type": "string"
+                        },
+                        "resource": {
+                            "$ref": "#/definitions/MdResource",
+                            "title": "resource"
+                        }
+                    },
+                    "required": [
+                        "group",
+                        "resource"
+                    ],
+                    "title": "remove",
+                    "type": "object"
+                }
+            },
+            "required": [
+                "remove"
+            ],
+            "title": "__type_3",
+            "type": "object"
+        },
+        "__type_4": {
+            "defaultProperties": [],
+            "properties": {
+                "color": {
+                    "title": "color",
+                    "type": "string"
+                },
+                "description": {
+                    "title": "description",
+                    "type": "string"
+                },
+                "hidden": {
+                    "title": "hidden",
+                    "type": "boolean"
+                },
+                "picture": {
+                    "title": "picture",
+                    "type": "string"
+                },
+                "preview": {
+                    "title": "preview",
+                    "type": "boolean"
+                },
+                "title": {
+                    "title": "title",
+                    "type": "string"
+                },
+                "vip": {
+                    "$ref": "#/definitions/PermVariation",
+                    "title": "vip"
+                }
+            },
+            "title": "__type_4",
+            "type": "object"
+        }
+    }
+}
+

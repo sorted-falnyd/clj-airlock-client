@@ -1,0 +1,340 @@
+{
+    "$ref": "#/definitions/Graph",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "definitions": {
+        "AppReference": {
+            "defaultProperties": [],
+            "properties": {
+                "app": {
+                    "defaultProperties": [],
+                    "properties": {
+                        "desk": {
+                            "title": "desk",
+                            "type": "string"
+                        },
+                        "path": {
+                            "title": "path",
+                            "type": "string"
+                        },
+                        "ship": {
+                            "title": "ship",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "desk",
+                        "path",
+                        "ship"
+                    ],
+                    "title": "app",
+                    "type": "object"
+                }
+            },
+            "required": [
+                "app"
+            ],
+            "title": "AppReference",
+            "type": "object"
+        },
+        "CodeContent": {
+            "defaultProperties": [],
+            "properties": {
+                "code": {
+                    "defaultProperties": [],
+                    "properties": {
+                        "expression": {
+                            "title": "expression",
+                            "type": "string"
+                        },
+                        "output": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "title": "output",
+                            "type": "array"
+                        }
+                    },
+                    "required": [
+                        "expression",
+                        "output"
+                    ],
+                    "title": "code",
+                    "type": "object"
+                }
+            },
+            "required": [
+                "code"
+            ],
+            "title": "CodeContent",
+            "type": "object"
+        },
+        "Graph": {
+            "defaultProperties": [],
+            "properties": {
+                "__@DRAFTABLE@23999": {
+                    "default": true,
+                    "title": "__@DRAFTABLE@23999",
+                    "type": "boolean"
+                },
+                "cachedIter": {
+                    "default": null,
+                    "items": {
+                        "items": [
+                            {
+                                "$ref": "#/definitions/bigInt.BigInteger"
+                            },
+                            {
+                                "$ref": "#/definitions/GraphNode"
+                            }
+                        ],
+                        "maxItems": 2,
+                        "minItems": 2,
+                        "type": "array"
+                    },
+                    "title": "cachedIter",
+                    "type": "array"
+                },
+                "root": {
+                    "$ref": "#/definitions/Record",
+                    "title": "root"
+                },
+                "size": {
+                    "title": "size",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "__@DRAFTABLE@23999",
+                "cachedIter",
+                "root",
+                "size"
+            ],
+            "title": "Graph",
+            "type": "object"
+        },
+        "GraphNode": {
+            "defaultProperties": [],
+            "properties": {
+                "children": {
+                    "$ref": "#/definitions/Graph",
+                    "title": "children"
+                },
+                "post": {
+                    "$ref": "#/definitions/Post",
+                    "title": "post"
+                }
+            },
+            "required": [
+                "children",
+                "post"
+            ],
+            "title": "GraphNode",
+            "type": "object"
+        },
+        "GraphReference": {
+            "defaultProperties": [],
+            "properties": {
+                "graph": {
+                    "defaultProperties": [],
+                    "properties": {
+                        "graph": {
+                            "title": "graph",
+                            "type": "string"
+                        },
+                        "group": {
+                            "title": "group",
+                            "type": "string"
+                        },
+                        "index": {
+                            "title": "index",
+                            "type": "string"
+                        }
+                    },
+                    "required": [
+                        "graph",
+                        "group",
+                        "index"
+                    ],
+                    "title": "graph",
+                    "type": "object"
+                }
+            },
+            "required": [
+                "graph"
+            ],
+            "title": "GraphReference",
+            "type": "object"
+        },
+        "GroupReference": {
+            "defaultProperties": [],
+            "properties": {
+                "group": {
+                    "title": "group",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "group"
+            ],
+            "title": "GroupReference",
+            "type": "object"
+        },
+        "MentionContent": {
+            "defaultProperties": [],
+            "properties": {
+                "emphasis": {
+                    "enum": [
+                        "bold",
+                        "italic"
+                    ],
+                    "title": "emphasis",
+                    "type": "string"
+                },
+                "mention": {
+                    "title": "mention",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "mention"
+            ],
+            "title": "MentionContent",
+            "type": "object"
+        },
+        "Patp": {
+            "title": "Patp",
+            "type": "string"
+        },
+        "Post": {
+            "defaultProperties": [],
+            "properties": {
+                "author": {
+                    "$ref": "#/definitions/Patp",
+                    "title": "author"
+                },
+                "contents": {
+                    "items": {
+                        "anyOf": [
+                            {
+                                "$ref": "#/definitions/TextContent"
+                            },
+                            {
+                                "$ref": "#/definitions/UrlContent"
+                            },
+                            {
+                                "$ref": "#/definitions/CodeContent"
+                            },
+                            {
+                                "$ref": "#/definitions/ReferenceContent"
+                            },
+                            {
+                                "$ref": "#/definitions/MentionContent"
+                            }
+                        ]
+                    },
+                    "title": "contents",
+                    "type": "array"
+                },
+                "hash": {
+                    "title": "hash",
+                    "type": "string"
+                },
+                "index": {
+                    "title": "index",
+                    "type": "string"
+                },
+                "pending": {
+                    "title": "pending",
+                    "type": "boolean"
+                },
+                "signatures": {
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "signatures",
+                    "type": "array"
+                },
+                "time-sent": {
+                    "title": "time-sent",
+                    "type": "number"
+                }
+            },
+            "required": [
+                "author",
+                "contents",
+                "hash",
+                "index",
+                "signatures",
+                "time-sent"
+            ],
+            "title": "Post",
+            "type": "object"
+        },
+        "Record": {
+            "$ref": "#/definitions/__type"
+        },
+        "ReferenceContent": {
+            "defaultProperties": [],
+            "properties": {
+                "reference": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/GraphReference"
+                        },
+                        {
+                            "$ref": "#/definitions/GroupReference"
+                        },
+                        {
+                            "$ref": "#/definitions/AppReference"
+                        }
+                    ],
+                    "title": "reference"
+                }
+            },
+            "required": [
+                "reference"
+            ],
+            "title": "ReferenceContent",
+            "type": "object"
+        },
+        "TextContent": {
+            "defaultProperties": [],
+            "properties": {
+                "text": {
+                    "title": "text",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "text"
+            ],
+            "title": "TextContent",
+            "type": "object"
+        },
+        "UrlContent": {
+            "defaultProperties": [],
+            "properties": {
+                "url": {
+                    "title": "url",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "url"
+            ],
+            "title": "UrlContent",
+            "type": "object"
+        },
+        "__type": {
+            "defaultProperties": [],
+            "title": "__type",
+            "type": "object"
+        },
+        "bigInt.BigInteger": {
+            "defaultProperties": [],
+            "title": "bigInt.BigInteger",
+            "type": "object"
+        }
+    }
+}
+
