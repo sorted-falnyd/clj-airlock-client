@@ -1,0 +1,354 @@
+{
+  "$ref": "#/definitions/MetadataUpdate",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Association": {
+      "properties": {
+        "app-name": {
+          "$ref": "#/definitions/MdAppName"
+        },
+        "group": {
+          "$ref": "#/definitions/Path"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata%3CMetadataConfig%3E"
+        },
+        "resource": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "app-name",
+        "group",
+        "metadata",
+        "resource"
+      ],
+      "type": "object"
+    },
+    "AssociationPoke": {
+      "properties": {
+        "group": {
+          "$ref": "#/definitions/Path"
+        },
+        "metadata": {
+          "$ref": "#/definitions/Metadata"
+        },
+        "resource": {
+          "$ref": "#/definitions/MdResource"
+        }
+      },
+      "required": [
+        "group",
+        "resource",
+        "metadata"
+      ],
+      "type": "object"
+    },
+    "GraphConfig": {
+      "properties": {
+        "graph": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "graph"
+      ],
+      "type": "object"
+    },
+    "GroupConfig": {
+      "properties": {
+        "group": {
+          "anyOf": [
+            {
+              "type": "object"
+            },
+            {
+              "$ref": "#/definitions/MdResource"
+            }
+          ]
+        }
+      },
+      "type": "object"
+    },
+    "MdAppName": {
+      "enum": [
+        "groups",
+        "graph"
+      ],
+      "type": "string"
+    },
+    "MdResource": {
+      "properties": {
+        "app-name": {
+          "$ref": "#/definitions/MdAppName"
+        },
+        "resource": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "resource",
+        "app-name"
+      ],
+      "type": "object"
+    },
+    "Metadata": {
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "#/definitions/MetadataConfig"
+        },
+        "creator": {
+          "$ref": "#/definitions/Patp"
+        },
+        "date-created": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "picture": {
+          "type": "string"
+        },
+        "preview": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "vip": {
+          "$ref": "#/definitions/PermVariation"
+        }
+      },
+      "required": [
+        "color",
+        "creator",
+        "date-created",
+        "description",
+        "title",
+        "config",
+        "hidden",
+        "picture",
+        "preview",
+        "vip"
+      ],
+      "type": "object"
+    },
+    "Metadata<MetadataConfig>": {
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "config": {
+          "$ref": "#/definitions/MetadataConfig"
+        },
+        "creator": {
+          "$ref": "#/definitions/Patp"
+        },
+        "date-created": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "picture": {
+          "type": "string"
+        },
+        "preview": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "vip": {
+          "$ref": "#/definitions/PermVariation"
+        }
+      },
+      "required": [
+        "color",
+        "creator",
+        "date-created",
+        "description",
+        "title",
+        "config",
+        "hidden",
+        "picture",
+        "preview",
+        "vip"
+      ],
+      "type": "object"
+    },
+    "MetadataConfig": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/GroupConfig"
+        },
+        {
+          "$ref": "#/definitions/GraphConfig"
+        }
+      ]
+    },
+    "MetadataEditField": {
+      "$ref": "#/definitions/Partial%3COmit%3CMetadata%2C(%22config%22%7C%22creator%22%7C%22date-created%22)%3E%3E"
+    },
+    "MetadataUpdate": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/MetadataUpdateInitial"
+        },
+        {
+          "$ref": "#/definitions/MetadataUpdateAdd"
+        },
+        {
+          "$ref": "#/definitions/MetadataUpdateUpdate"
+        },
+        {
+          "$ref": "#/definitions/MetadataUpdateRemove"
+        },
+        {
+          "$ref": "#/definitions/MetadataUpdateEdit"
+        }
+      ]
+    },
+    "MetadataUpdateAdd": {
+      "properties": {
+        "add": {
+          "$ref": "#/definitions/AssociationPoke"
+        }
+      },
+      "required": [
+        "add"
+      ],
+      "type": "object"
+    },
+    "MetadataUpdateEdit": {
+      "properties": {
+        "edit": {
+          "properties": {
+            "edit": {
+              "$ref": "#/definitions/MetadataEditField"
+            },
+            "group": {
+              "type": "string"
+            },
+            "resource": {
+              "$ref": "#/definitions/MdResource"
+            }
+          },
+          "required": [
+            "resource",
+            "group",
+            "edit"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "edit"
+      ],
+      "type": "object"
+    },
+    "MetadataUpdateInitial": {
+      "properties": {
+        "associations": {
+          "$ref": "#/definitions/ResourceAssociations"
+        }
+      },
+      "required": [
+        "associations"
+      ],
+      "type": "object"
+    },
+    "MetadataUpdateRemove": {
+      "properties": {
+        "remove": {
+          "properties": {
+            "group": {
+              "type": "string"
+            },
+            "resource": {
+              "$ref": "#/definitions/MdResource"
+            }
+          },
+          "required": [
+            "resource",
+            "group"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "remove"
+      ],
+      "type": "object"
+    },
+    "MetadataUpdateUpdate": {
+      "properties": {
+        "update": {
+          "$ref": "#/definitions/AssociationPoke"
+        }
+      },
+      "required": [
+        "update"
+      ],
+      "type": "object"
+    },
+    "Partial<Omit<Metadata,(\"config\"|\"creator\"|\"date-created\")>>": {
+      "properties": {
+        "color": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "hidden": {
+          "type": "boolean"
+        },
+        "picture": {
+          "type": "string"
+        },
+        "preview": {
+          "type": "boolean"
+        },
+        "title": {
+          "type": "string"
+        },
+        "vip": {
+          "$ref": "#/definitions/PermVariation"
+        }
+      },
+      "type": "object"
+    },
+    "Path": {
+      "type": "string"
+    },
+    "Patp": {
+      "type": "string"
+    },
+    "PermVariation": {
+      "enum": [
+        "",
+        " ",
+        "reader-comments",
+        "member-metadata",
+        "host-feed",
+        "admin-feed"
+      ],
+      "type": "string"
+    },
+    "ResourceAssociations": {
+      "additionalProperties": {
+        "$ref": "#/definitions/Association"
+      },
+      "type": "object"
+    }
+  }
+}

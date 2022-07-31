@@ -1,0 +1,296 @@
+{
+  "$ref": "#/definitions/Graph",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "AppReference": {
+      "properties": {
+        "app": {
+          "properties": {
+            "desk": {
+              "type": "string"
+            },
+            "path": {
+              "type": "string"
+            },
+            "ship": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "ship",
+            "desk",
+            "path"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "app"
+      ],
+      "type": "object"
+    },
+    "BigIntOrderedMap<GraphNode>": {
+      "properties": {
+        "cachedIter": {
+          "anyOf": [
+            {
+              "items": {
+                "items": [
+                  {
+                    "$ref": "#/definitions/bigInt.BigInteger"
+                  },
+                  {
+                    "$ref": "#/definitions/GraphNode"
+                  }
+                ],
+                "maxItems": 2,
+                "minItems": 2,
+                "type": "array"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "root": {
+          "$ref": "#/definitions/Record%3Cstring%2CGraphNode%3E"
+        }
+      },
+      "required": [
+        "root",
+        "cachedIter"
+      ],
+      "type": "object"
+    },
+    "CodeContent": {
+      "properties": {
+        "code": {
+          "properties": {
+            "expression": {
+              "type": "string"
+            },
+            "output": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "expression"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "code"
+      ],
+      "type": "object"
+    },
+    "Content": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/TextContent"
+        },
+        {
+          "$ref": "#/definitions/UrlContent"
+        },
+        {
+          "$ref": "#/definitions/CodeContent"
+        },
+        {
+          "$ref": "#/definitions/ReferenceContent"
+        },
+        {
+          "$ref": "#/definitions/MentionContent"
+        }
+      ]
+    },
+    "Graph": {
+      "$ref": "#/definitions/BigIntOrderedMap%3CGraphNode%3E"
+    },
+    "GraphNode": {
+      "properties": {
+        "children": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/Graph"
+            },
+            {
+              "type": "null"
+            }
+          ]
+        },
+        "post": {
+          "$ref": "#/definitions/Post"
+        }
+      },
+      "required": [
+        "children",
+        "post"
+      ],
+      "type": "object"
+    },
+    "GraphReference": {
+      "properties": {
+        "graph": {
+          "properties": {
+            "graph": {
+              "type": "string"
+            },
+            "group": {
+              "type": "string"
+            },
+            "index": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "graph",
+            "group",
+            "index"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "graph"
+      ],
+      "type": "object"
+    },
+    "GroupReference": {
+      "properties": {
+        "group": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "group"
+      ],
+      "type": "object"
+    },
+    "MentionContent": {
+      "properties": {
+        "emphasis": {
+          "enum": [
+            "bold",
+            "italic"
+          ],
+          "type": "string"
+        },
+        "mention": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "mention"
+      ],
+      "type": "object"
+    },
+    "Patp": {
+      "type": "string"
+    },
+    "Post": {
+      "properties": {
+        "author": {
+          "$ref": "#/definitions/Patp"
+        },
+        "contents": {
+          "items": {
+            "$ref": "#/definitions/Content"
+          },
+          "type": "array"
+        },
+        "hash": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "index": {
+          "type": "string"
+        },
+        "pending": {
+          "type": "boolean"
+        },
+        "signatures": {
+          "items": {
+              "type": "object",
+              "properties": {
+                  "signature": {"type": "string"},
+                  "ship": {"type": "string"},
+                  "life": {"type": "number"}
+              }
+          },
+          "type": "array"
+        },
+        "time-sent": {
+          "type": "number"
+        }
+      },
+      "required": [
+        "author",
+        "contents",
+        "hash",
+        "index",
+        "signatures",
+        "time-sent"
+      ],
+      "type": "object"
+    },
+    "Record<string,GraphNode>": {
+      "additionalProperties": {
+        "$ref": "#/definitions/GraphNode"
+      },
+      "type": "object"
+    },
+    "ReferenceContent": {
+      "properties": {
+        "reference": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/AppReference"
+            },
+            {
+              "$ref": "#/definitions/GraphReference"
+            },
+            {
+              "$ref": "#/definitions/GroupReference"
+            }
+          ]
+        }
+      },
+      "required": [
+        "reference"
+      ],
+      "type": "object"
+    },
+    "TextContent": {
+      "properties": {
+        "text": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "text"
+      ],
+      "type": "object"
+    },
+    "UrlContent": {
+      "properties": {
+        "url": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "url"
+      ],
+      "type": "object"
+    },
+    "bigInt.BigInteger": {
+      "type": "object"
+    }
+  }
+}

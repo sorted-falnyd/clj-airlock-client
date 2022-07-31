@@ -1,0 +1,276 @@
+{
+  "$ref": "#/definitions/ContactUpdate",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "Contact": {
+      "properties": {
+        "avatar": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "bio": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "cover": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "groups": {
+          "items": {
+            "$ref": "#/definitions/Path"
+          },
+          "type": "array"
+        },
+        "last-updated": {
+          "type": "number"
+        },
+        "nickname": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "nickname",
+        "bio",
+        "status",
+        "color",
+        "avatar",
+        "cover",
+        "groups",
+        "last-updated"
+      ],
+      "type": "object"
+    },
+    "ContactEditField": {
+      "properties": {
+        "add-group": {
+          "$ref": "#/definitions/Resource"
+        },
+        "avatar": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "bio": {
+          "type": "string"
+        },
+        "color": {
+          "type": "string"
+        },
+        "cover": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "nickname": {
+          "type": "string"
+        },
+        "remove-group": {
+          "$ref": "#/definitions/Resource"
+        },
+        "status": {
+          "type": "string"
+        }
+      },
+      "type": "object"
+    },
+    "ContactUpdate": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/ContactUpdateAdd"
+        },
+        {
+          "$ref": "#/definitions/ContactUpdateRemove"
+        },
+        {
+          "$ref": "#/definitions/ContactUpdateEdit"
+        },
+        {
+          "$ref": "#/definitions/ContactUpdateInitial"
+        },
+        {
+          "$ref": "#/definitions/ContactUpdateAllowGroup"
+        },
+        {
+          "$ref": "#/definitions/ContactUpdateAllowShips"
+        },
+        {
+          "$ref": "#/definitions/ContactUpdateSetPublic"
+        }
+      ]
+    },
+    "ContactUpdateAdd": {
+      "properties": {
+        "add": {
+          "properties": {
+            "contact": {
+              "$ref": "#/definitions/Contact"
+            },
+            "ship": {
+              "$ref": "#/definitions/Patp"
+            }
+          },
+          "required": [
+            "ship",
+            "contact"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "add"
+      ],
+      "type": "object"
+    },
+    "ContactUpdateAllowGroup": {
+      "properties": {
+        "allow": {
+          "properties": {
+            "group": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "required": [
+            "group"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "allow"
+      ],
+      "type": "object"
+    },
+    "ContactUpdateAllowShips": {
+      "properties": {
+        "allow": {
+          "properties": {
+            "ships": {
+              "items": {
+                "$ref": "#/definitions/Patp"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "ships"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "allow"
+      ],
+      "type": "object"
+    },
+    "ContactUpdateEdit": {
+      "properties": {
+        "edit": {
+          "properties": {
+            "edit-field": {
+              "$ref": "#/definitions/ContactEditField"
+            },
+            "ship": {
+              "$ref": "#/definitions/Patp"
+            },
+            "timestamp": {
+              "type": "number"
+            }
+          },
+          "required": [
+            "ship",
+            "edit-field",
+            "timestamp"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "edit"
+      ],
+      "type": "object"
+    },
+    "ContactUpdateInitial": {
+      "properties": {
+        "initial": {
+          "$ref": "#/definitions/Rolodex"
+        }
+      },
+      "required": [
+        "initial"
+      ],
+      "type": "object"
+    },
+    "ContactUpdateRemove": {
+      "properties": {
+        "remove": {
+          "properties": {
+            "ship": {
+              "$ref": "#/definitions/Patp"
+            }
+          },
+          "required": [
+            "ship"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "remove"
+      ],
+      "type": "object"
+    },
+    "ContactUpdateSetPublic": {
+      "properties": {
+        "set-public": {
+          "type": "boolean"
+        }
+      },
+      "required": [
+        "set-public"
+      ],
+      "type": "object"
+    },
+    "Path": {
+      "type": "string"
+    },
+    "Patp": {
+      "type": "string"
+    },
+    "PatpNoSig": {
+      "type": "string"
+    },
+    "Resource": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ship": {
+          "$ref": "#/definitions/PatpNoSig"
+        }
+      },
+      "required": [
+        "name",
+        "ship"
+      ],
+      "type": "object"
+    },
+    "Rolodex": {
+      "additionalProperties": {
+        "$ref": "#/definitions/Contact"
+      },
+      "type": "object"
+    }
+  }
+}

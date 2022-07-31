@@ -70,10 +70,10 @@ Further actions, indexing, etc can be performed by subscribing on it.
 
 ### Schemas
 
-Using typescript-json-schema on the urbit API, emit schemas that can be parsed
+Using ts-json-schema-generator on the urbit API, emit schemas that can be parsed
 
 ```bash
-typescript-json-schema tsconfig.json Graph --refs --aliasRefs --topRef --titles --defaultProps --required --tsNodeRegister   > graph.json
+./node_modules/.bin/ts-json-schema-generator -e all --additional-properties true -f tsconfig.json --type 'Graph'  > ~/Urbit/clj-airlock-api/src/dev/resources/graph-update2.json
 ```
 
 Parse the schema to a basic malli schema
