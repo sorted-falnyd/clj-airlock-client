@@ -80,7 +80,8 @@
                (map (fn [[_ k :as v]]
                       (if k
                         [(keyword k) v]
-                        [:empty :nil]))))
+                        [:empty :nil])
+                      #_[(keyword k) v])))
               any-of)))))
 
 (defn parse-all-of
@@ -167,12 +168,13 @@
 
 (defmulti parse-response first)
 (defmulti parse-diff first)
+(defmulti parse-metadata-update first)
 
 (defmethod parse-response :poke/ack [[_ v]] v)
 (defmethod parse-response :poke/nack [[_ v]] v)
 (defmethod parse-response :watch/ack [[_ v]] v)
 (defmethod parse-response :watch/nack [[_ v]] v)
-(defmethod parse-response :diff [[_ v]] (parse-diff v))
+(defmethod parse-response :diff [[_ v]] (parse-diff (:json v)))
 
 (def actions
   {"Graph.GraphUpdate"
@@ -201,8 +203,114 @@
     [:metadata-update [:map [:metadata-update [:ref "Metadata.MetadataUpdate"]]]]
     [:contact-update [:map [:contact-update [:ref "Contact.ContactUpdate"]]]]]})
 
-#_(defmethod parse-diff :metadata-update [[_ {:keys [metadata-update]}]]
+(defmethod parse-diff :metadata-update [[_ {:keys [metadata-update]}]]
   (parse-metadata-update metadata-update))
+
+(defmulti parse-graph-update first)
+
+(defmethod parse-diff :graph-update [[_ {:keys [graph-update]}]]
+  (parse-graph-update graph-update))
+
+(defmulti parse-graph-contents first)
+
+(defmethod parse-graph-contents :Graph.TextContent [[_ {:keys [text]}]]
+  {:graph.post/content text
+   :graph.post.content/type :graph.post.content.type/text})
+
+(defmethod parse-graph-contents :Graph.UrlContent [[_ {:keys [url]}]]
+  {:graph.post/content url
+   :graph.post.content/type :graph.post.content.type/url})
+
+
+(defmethod parse-graph-contents :Graph.CodeContent [[_ {:keys [code]}]]
+  (cond->
+      {:graph.post/content (:expression code)
+       :graph.post.content/type :graph.post.content.type/code}
+    (:output code) (assoc :graph.post.code/output (:output code))))
+
+(defmethod parse-graph-contents :Graph.MentionContent [[_ {:keys [mention emphasis]}]]
+  (cond->
+      {:graph.post/content mention
+       :graph.post.content/type :graph.post.content.type/mention}
+    emphasis (assoc :graph.post.mention/emphasis emphasis)))
+
+(defmethod parse-graph-contents :Graph.ReferenceContent [[_ {:keys [app graph group]}]]
+  (or
+   (and app
+        {:graph.post.content/reference app
+         :graph.post.content/type :graph.post.content.type/app-reference})
+   (and graph
+        {:graph.post.content/reference graph
+         :graph.post.content/type :graph.post.content.type/graph-reference})
+   (and group
+        {:graph.post.content/reference group
+         :graph.post.content/type :graph.post.content.type/group-reference})
+   ))
+
+(defn parse-graph-node
+  [{children :children
+    {:keys [index signatures hash author time-sent contents]} :post}]
+  {:graph.post/children children
+   :graph.post/index index
+   :graph.post/signatures (mapv (fn [{:keys [signature ship life]}]
+                                  {:graph.post.signature/signature signature
+                                   :graph.post.signature/ship ship
+                                   :graph.post.signature/life life})
+                                signatures)
+   :graph.post/contents (mapv parse-graph-contents contents)
+   :graph.post/hash hash
+   :graph.post/author author
+   :graph.post/time-sent time-sent
+   })
+
+(defmethod parse-graph-update :add-nodes [[_ {:keys [add-nodes]}]]
+  ())
+
+(defmulti parse-md-config first)
+
+(defmethod parse-md-config :Metadata.GroupConfig [[_ {:keys [group] :as m}]]
+  (if (= :empty (first group))
+    nil
+    (let [{:keys [resource app-name]} (second group)]
+      {:metadata.config.group/resource resource
+       :metadata.config.group/app-name (keyword "metadata.config.group.app-name" app-name)})))
+
+(defmethod parse-md-config :Metadata.GraphConfig
+  [[_ {:keys [graph]}]]
+  {:metadata.config/graph graph})
+
+(defn parse-association
+  [{resource :resource
+    app-name :app-name
+    group :group
+    {:keys [description date-created creator color config title preview hidden picture vip]} :metadata}]
+  (merge
+   {:graph/group group
+    :graph/app-name app-name
+    :graph/resource resource
+    :metadata/description description,
+    :metadata/date-created date-created
+    :metadata/creator creator
+    :metadata/color color
+    :metadata/title title,
+    :metadata/preview preview,
+    :metadata/hidden hidden,
+    :metadata/picture picture,
+    :metadata/vip vip}
+   (parse-md-config config)))
+
+(defmethod parse-metadata-update :Metadata.MetadataUpdateInitial
+  [[_ {:keys [associations]}]]
+  (reduce-kv
+   (fn [m k v]
+     (assoc m k (parse-association v)))
+   {}
+   associations))
+
+(defmethod parse-metadata-update :Metadata.MetadataUpdateAdd [_ {}])
+(defmethod parse-metadata-update :Metadata.MetadataUpdateUpdate [_ {}])
+(defmethod parse-metadata-update :Metadata.MetadataUpdateRemove [_ {}])
+(defmethod parse-metadata-update :Metadata.MetadataUpdateEdit [_ {}])
 
 (def master-reg
   (merge
@@ -234,7 +342,4 @@
 
 (def f (go [:schema {:registry master-reg} "Response"]))
 
-(mapv f sample)
-
-
-
+(mapv parse-response (mapv f sample))
