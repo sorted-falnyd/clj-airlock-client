@@ -189,10 +189,10 @@
     "MetadataConfig": {
       "anyOf": [
         {
-          "$ref": "#/definitions/GroupConfig"
+          "$ref": "#/definitions/GraphConfig"
         },
         {
-          "$ref": "#/definitions/GraphConfig"
+            "$ref": "#/definitions/GroupConfig"
         }
       ]
     },
