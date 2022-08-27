@@ -65,11 +65,11 @@
 
 (defmethod parse-graph-update :add-nodes [[_ {:keys [add-nodes]}]]
   (let [{:keys [nodes resource]} add-nodes]
-    (reduce-kv (fn [m k v] (assoc m k (parse-graph-node (assoc v :resource resource)))) {} nodes)))
+    (reduce-kv (fn [m _ v] (conj m (parse-graph-node (assoc v :resource resource)))) [] nodes)))
 
 (defmethod parse-graph-update :add-graph [[_ {:keys [add-graph]}]]
   (let [{:keys [_mark graph resource]} add-graph]
     (reduce-kv (fn [m k v] (assoc m k (parse-graph-node (assoc v :resource resource)))) {} graph)))
 
 (defmethod parse-graph-update :keys [[_ {ks :keys}]]
-  (mapv (fn [{:keys [name ship]}] (keyword ship name)) ks))
+  (mapv (fn [{:keys [name ship]}] {:graph/resource (keyword ship name)}) ks))
