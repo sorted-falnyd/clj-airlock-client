@@ -52,8 +52,9 @@
 
 (defn -opened
   [{o :opened}]
-  {:hark/hark :hark/opened
-   :hark/opened o})
+  (cond->
+      {:hark/hark :hark/opened}
+    o (assoc :hark/opened o)))
 
 (defn parse-hark-update
   [{:keys [unread-count

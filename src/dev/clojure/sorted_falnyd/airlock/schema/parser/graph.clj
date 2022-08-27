@@ -47,17 +47,17 @@
     {:keys [index signatures hash author time-sent contents]} :post
     {:keys [name ship] :as resource} :resource}]
   (cond->
-      {:graph.post/children children
-       :graph.post/index index
+      {:graph.post/index index
        :graph.post/signatures (mapv (fn [{:keys [signature ship life]}]
                                       {:graph.post.signature/signature signature
                                        :graph.post.signature/ship ship
                                        :graph.post.signature/life life})
                                     signatures)
        :graph.post/contents (mapv parse-graph-contents contents)
-       :graph.post/hash hash
        :graph.post/author author
        :graph.post/time-sent time-sent}
+    children (assoc :graph.post/children children)
+    hash (assoc :graph.post/hash hash)
     resource (assoc :graph.post/id (str name "/" ship index)
                     :graph.resource/name name
                     :graph.resource/ship ship
