@@ -4,7 +4,7 @@
         org.clojure/tools.logging {:mvn/version "1.2.2"}
         com.cognitect/transit-clj {:mvn/version "1.0.324"}
         metosin/jsonista {:mvn/version "0.3.5"}
-        metosin/malli {:mvn/version "0.7.5"}
+        metosin/malli {:mvn/version "0.8.5"}
         funcool/promesa {:mvn/version "6.0.2"}
 
         io.replikativ/datahike {:mvn/version "0.4.1479"}
