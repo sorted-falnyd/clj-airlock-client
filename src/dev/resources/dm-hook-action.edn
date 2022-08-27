@@ -1,0 +1,10 @@
+[:map
+ [:json
+  [:map
+   [:dm-hook-action
+    [:map
+     [:pendings {:optional true} [:vector string?]]
+     [:accept {:optional true} string?]]]]]
+ [:id int?]
+ [:response string?]
+ [:mark string?]]

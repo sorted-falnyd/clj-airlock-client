@@ -1,0 +1,74 @@
+[:map
+  [:json
+   [:map
+    [:more
+     [:vector
+      [:map
+       [:unread-count
+        {:optional true}
+        [:map
+         [:place [:map [:desk string?] [:path string?]]]
+         [:count int?]
+         [:inc boolean?]]]
+       [:saw-place
+        {:optional true}
+        [:map
+         [:place [:map [:desk string?] [:path string?]]]
+         [:time :nil]]]
+       [:read-count
+        {:optional true}
+        [:map [:desk string?] [:path string?]]]
+       [:added
+        {:optional true}
+        [:map
+         [:body
+          [:vector
+           [:map
+            [:content
+             [:vector
+              [:map
+               [:ship {:optional true} string?]
+               [:text {:optional true} string?]]]]
+            [:time int?]
+            [:title
+             [:vector
+              [:map
+               [:text {:optional true} string?]
+               [:ship {:optional true} string?]]]]
+            [:link string?]]]]
+         [:bin
+          [:map
+           [:place [:map [:desk string?] [:path string?]]]
+           [:path string?]]]
+         [:time int?]]]
+       [:archived
+        {:optional true}
+        [:map
+         [:lid [:map [:unseen :nil]]]
+         [:time string?]
+         [:notification
+          [:map
+           [:body
+            [:vector
+             [:map
+              [:content
+               [:vector
+                [:map
+                 [:ship {:optional true} string?]
+                 [:text {:optional true} string?]]]]
+              [:time int?]
+              [:title
+               [:vector
+                [:map
+                 [:text {:optional true} string?]
+                 [:ship {:optional true} string?]]]]
+              [:link string?]]]]
+           [:bin
+            [:map
+             [:place [:map [:desk string?] [:path string?]]]
+             [:path string?]]]
+           [:time int?]]]]]
+       [:opened {:optional true} [:vector any?]]]]]]]
+  [:id int?]
+  [:response string?]
+  [:mark string?]]

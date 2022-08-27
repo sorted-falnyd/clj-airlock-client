@@ -1,0 +1,625 @@
+{
+  "$ref": "#/definitions/GroupUpdate",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "definitions": {
+    "AddInvitesDiff": {
+      "properties": {
+        "addInvites": {
+          "items": {
+            "$ref": "#/definitions/PatpNoSig"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "addInvites"
+      ],
+      "type": "object"
+    },
+    "AllowRanksDiff": {
+      "properties": {
+        "allowRanks": {
+          "items": {
+            "$ref": "#/definitions/ShipRank"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "allowRanks"
+      ],
+      "type": "object"
+    },
+    "AllowShipsDiff": {
+      "properties": {
+        "allowShips": {
+          "items": {
+            "$ref": "#/definitions/PatpNoSig"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "allowShips"
+      ],
+      "type": "object"
+    },
+    "AppTag": {
+      "properties": {
+        "app": {
+          "type": "string"
+        },
+        "resource": {
+          "type": "string"
+        },
+        "tag": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "app",
+        "resource",
+        "tag"
+      ],
+      "type": "object"
+    },
+    "BanRanksDiff": {
+      "properties": {
+        "banRanks": {
+          "items": {
+            "$ref": "#/definitions/ShipRank"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "banRanks"
+      ],
+      "type": "object"
+    },
+    "BanShipsDiff": {
+      "properties": {
+        "banShips": {
+          "items": {
+            "$ref": "#/definitions/PatpNoSig"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "banShips"
+      ],
+      "type": "object"
+    },
+    "Enc<Group>": {
+      "$ref": "#/definitions/Group",
+      "description": "Turns sets into arrays and maps into objects so we can send them over the wire"
+    },
+    "Enc<GroupPolicy>": {
+      "$ref": "#/definitions/GroupPolicy",
+      "description": "Turns sets into arrays and maps into objects so we can send them over the wire"
+    },
+    "Enc<Groups>": {
+      "$ref": "#/definitions/Groups",
+      "description": "Turns sets into arrays and maps into objects so we can send them over the wire"
+    },
+    "Group": {
+      "properties": {
+        "hidden": {
+          "type": "boolean"
+        },
+        "members": {
+          "items": {
+            "$ref": "#/definitions/PatpNoSig"
+          },
+          "type": "array"
+        },
+        "policy": {
+          "$ref": "#/definitions/GroupPolicy"
+        },
+        "tags": {
+          "$ref": "#/definitions/Tags"
+        }
+      },
+      "required": [
+        "members",
+        "tags",
+        "policy",
+        "hidden"
+      ],
+      "type": "object"
+    },
+    "GroupPolicy": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/OpenPolicy"
+        },
+        {
+          "$ref": "#/definitions/InvitePolicy"
+        }
+      ]
+    },
+    "GroupPolicyDiff": {
+      "anyOf": [
+        {
+          "properties": {
+            "open": {
+              "$ref": "#/definitions/OpenPolicyDiff"
+            }
+          },
+          "required": [
+            "open"
+          ],
+          "type": "object"
+        },
+        {
+          "properties": {
+            "invite": {
+              "$ref": "#/definitions/InvitePolicyDiff"
+            }
+          },
+          "required": [
+            "invite"
+          ],
+          "type": "object"
+        },
+        {
+          "$ref": "#/definitions/ReplacePolicyDiff"
+        }
+      ]
+    },
+    "GroupUpdate": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/GroupUpdateInitial"
+        },
+        {
+          "$ref": "#/definitions/GroupUpdateAddGroup"
+        },
+        {
+          "$ref": "#/definitions/GroupUpdateAddMembers"
+        },
+        {
+          "$ref": "#/definitions/GroupUpdateRemoveMembers"
+        },
+        {
+          "$ref": "#/definitions/GroupUpdateAddTag"
+        },
+        {
+          "$ref": "#/definitions/GroupUpdateRemoveTag"
+        },
+        {
+          "$ref": "#/definitions/GroupUpdateChangePolicy"
+        },
+        {
+          "$ref": "#/definitions/GroupUpdateRemoveGroup"
+        },
+        {
+          "$ref": "#/definitions/GroupUpdateExpose"
+        },
+        {
+          "$ref": "#/definitions/GroupUpdateInitialGroup"
+        }
+      ]
+    },
+    "GroupUpdateAddGroup": {
+      "properties": {
+        "addGroup": {
+          "properties": {
+            "hidden": {
+              "type": "boolean"
+            },
+            "policy": {
+              "$ref": "#/definitions/Enc%3CGroupPolicy%3E"
+            },
+            "resource": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "required": [
+            "resource",
+            "policy",
+            "hidden"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "addGroup"
+      ],
+      "type": "object"
+    },
+    "GroupUpdateAddMembers": {
+      "properties": {
+        "addMembers": {
+          "properties": {
+            "resource": {
+              "$ref": "#/definitions/Resource"
+            },
+            "ships": {
+              "items": {
+                "$ref": "#/definitions/PatpNoSig"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "ships",
+            "resource"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "addMembers"
+      ],
+      "type": "object"
+    },
+    "GroupUpdateAddTag": {
+      "properties": {
+        "addTag": {
+          "properties": {
+            "resource": {
+              "$ref": "#/definitions/Resource"
+            },
+            "ships": {
+              "items": {
+                "$ref": "#/definitions/PatpNoSig"
+              },
+              "type": "array"
+            },
+            "tag": {
+              "$ref": "#/definitions/Tag"
+            }
+          },
+          "required": [
+            "tag",
+            "resource",
+            "ships"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "addTag"
+      ],
+      "type": "object"
+    },
+    "GroupUpdateChangePolicy": {
+      "properties": {
+        "changePolicy": {
+          "properties": {
+            "diff": {
+              "$ref": "#/definitions/GroupPolicyDiff"
+            },
+            "resource": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "required": [
+            "resource",
+            "diff"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "changePolicy"
+      ],
+      "type": "object"
+    },
+    "GroupUpdateExpose": {
+      "properties": {
+        "expose": {
+          "properties": {
+            "resource": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "required": [
+            "resource"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "expose"
+      ],
+      "type": "object"
+    },
+    "GroupUpdateInitial": {
+      "properties": {
+        "initial": {
+          "$ref": "#/definitions/Enc%3CGroups%3E"
+        }
+      },
+      "required": [
+        "initial"
+      ],
+      "type": "object"
+    },
+    "GroupUpdateInitialGroup": {
+      "properties": {
+        "initialGroup": {
+          "properties": {
+            "group": {
+              "$ref": "#/definitions/Enc%3CGroup%3E"
+            },
+            "resource": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "required": [
+            "resource",
+            "group"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "initialGroup"
+      ],
+      "type": "object"
+    },
+    "GroupUpdateRemoveGroup": {
+      "properties": {
+        "removeGroup": {
+          "properties": {
+            "resource": {
+              "$ref": "#/definitions/Resource"
+            }
+          },
+          "required": [
+            "resource"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "removeGroup"
+      ],
+      "type": "object"
+    },
+    "GroupUpdateRemoveMembers": {
+      "properties": {
+        "removeMembers": {
+          "properties": {
+            "resource": {
+              "$ref": "#/definitions/Resource"
+            },
+            "ships": {
+              "items": {
+                "$ref": "#/definitions/PatpNoSig"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "ships",
+            "resource"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "removeMembers"
+      ],
+      "type": "object"
+    },
+    "GroupUpdateRemoveTag": {
+      "properties": {
+        "removeTag": {
+          "properties": {
+            "resource": {
+              "$ref": "#/definitions/Resource"
+            },
+            "ships": {
+              "items": {
+                "$ref": "#/definitions/PatpNoSig"
+              },
+              "type": "array"
+            },
+            "tag": {
+              "$ref": "#/definitions/Tag"
+            }
+          },
+          "required": [
+            "tag",
+            "resource",
+            "ships"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "removeTag"
+      ],
+      "type": "object"
+    },
+    "Groups": {
+      "additionalProperties": {
+        "$ref": "#/definitions/Group"
+      },
+      "type": "object"
+    },
+    "InvitePolicy": {
+      "properties": {
+        "invite": {
+          "properties": {
+            "pending": {
+              "items": {
+                "$ref": "#/definitions/PatpNoSig"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "pending"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "invite"
+      ],
+      "type": "object"
+    },
+    "InvitePolicyDiff": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AddInvitesDiff"
+        },
+        {
+          "$ref": "#/definitions/RemoveInvitesDiff"
+        }
+      ]
+    },
+    "OpenPolicy": {
+      "properties": {
+        "open": {
+          "properties": {
+            "banRanks": {
+              "items": {
+                "$ref": "#/definitions/ShipRank"
+              },
+              "type": "array"
+            },
+            "banned": {
+              "items": {
+                "$ref": "#/definitions/PatpNoSig"
+              },
+              "type": "array"
+            }
+          },
+          "required": [
+            "banned",
+            "banRanks"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "open"
+      ],
+      "type": "object"
+    },
+    "OpenPolicyDiff": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AllowRanksDiff"
+        },
+        {
+          "$ref": "#/definitions/BanRanksDiff"
+        },
+        {
+          "$ref": "#/definitions/AllowShipsDiff"
+        },
+        {
+          "$ref": "#/definitions/BanShipsDiff"
+        }
+      ]
+    },
+    "PatpNoSig": {
+      "type": "string"
+    },
+    "RemoveInvitesDiff": {
+      "properties": {
+        "removeInvites": {
+          "items": {
+            "$ref": "#/definitions/PatpNoSig"
+          },
+          "type": "array"
+        }
+      },
+      "required": [
+        "removeInvites"
+      ],
+      "type": "object"
+    },
+    "ReplacePolicyDiff": {
+      "properties": {
+        "replace": {
+          "$ref": "#/definitions/GroupPolicy"
+        }
+      },
+      "required": [
+        "replace"
+      ],
+      "type": "object"
+    },
+    "Resource": {
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "ship": {
+          "$ref": "#/definitions/PatpNoSig"
+        }
+      },
+      "required": [
+        "name",
+        "ship"
+      ],
+      "type": "object"
+    },
+    "RoleTag": {
+      "properties": {
+        "tag": {
+          "enum": [
+            "admin",
+            "moderator",
+            "janitor"
+          ],
+          "type": "string"
+        }
+      },
+      "required": [
+        "tag"
+      ],
+      "type": "object"
+    },
+    "ShipRank": {
+      "enum": [
+        "czar",
+        "king",
+        "duke",
+        "earl",
+        "pawn"
+      ],
+      "type": "string"
+    },
+    "Tag": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/AppTag"
+        },
+        {
+          "$ref": "#/definitions/RoleTag"
+        }
+      ]
+    },
+    "TaggedShips": {
+      "additionalProperties": {
+        "items": {
+          "$ref": "#/definitions/PatpNoSig"
+        },
+        "type": "array"
+      },
+      "type": "object"
+    },
+    "Tags": {
+      "additionalProperties": {
+        "$ref": "#/definitions/TaggedShips"
+      },
+      "properties": {
+        "role": {
+          "$ref": "#/definitions/TaggedShips"
+        }
+      },
+      "required": [
+        "role"
+      ],
+      "type": "object"
+    }
+  }
+}
