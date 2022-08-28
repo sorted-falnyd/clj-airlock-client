@@ -29,9 +29,8 @@
     group :group
     {:keys [description date-created creator color config title preview hidden picture vip]} :metadata}]
   (merge
-   {:graph/group group
-    :graph/app-name app-name
-    :graph/resource (parse-resource resource)
+   {:graph/app-name app-name
+    :urbit/resource (parse-resource resource)
     :metadata/description description,
     :metadata/date-created date-created
     :metadata/creator creator
@@ -41,6 +40,8 @@
     :metadata/hidden hidden,
     :metadata/picture picture,
     :metadata/vip vip}
+   (when group
+     {:graph/group [:urbit/resource (parse-resource group)]})
    (parse-md-config config)))
 
 (defmethod parse-metadata-update :Metadata.MetadataUpdateInitial

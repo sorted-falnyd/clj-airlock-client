@@ -61,7 +61,7 @@
     resource (assoc :graph.post/id (str name "/" ship index)
                     :graph.resource/name name
                     :graph.resource/ship ship
-                    :graph/resource (keyword name ship))))
+                    :urbit/resource (keyword ship name))))
 
 (defmethod parse-graph-update :add-nodes [[_ {:keys [add-nodes]}]]
   (let [{:keys [nodes resource]} add-nodes]
@@ -72,4 +72,4 @@
     (reduce-kv (fn [m k v] (assoc m k (parse-graph-node (assoc v :resource resource)))) {} graph)))
 
 (defmethod parse-graph-update :keys [[_ {ks :keys}]]
-  (mapv (fn [{:keys [name ship]}] {:graph/resource (keyword ship name)}) ks))
+  (mapv (fn [{:keys [name ship]}] {:urbit/resource (keyword ship name)}) ks))

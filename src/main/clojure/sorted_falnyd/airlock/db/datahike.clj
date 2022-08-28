@@ -24,8 +24,8 @@
 (d/q
  '[:find ?r ?title ?c
    :where
-   [?e :graph/resource ?r]
+   [?e :urbit/resource ?r]
    [?e :metadata/title ?title]
-   [?p :graph/resource ?r]
+   [?p :urbit/resource ?r]
    [?p :post/contents ?c]]
  (d/db -conn))

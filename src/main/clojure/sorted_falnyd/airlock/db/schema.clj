@@ -7,7 +7,7 @@
    {:db/ident :graph/group
     :db/valueType :db.type/keyword
     :db/cardinality :db.cardinality/one}
-   {:db/ident :graph/resource
+   {:db/ident :urbit/resource
     :db/valueType :db.type/keyword
     :db/unique :db.unique/identity
     :db/cardinality :db.cardinality/one}

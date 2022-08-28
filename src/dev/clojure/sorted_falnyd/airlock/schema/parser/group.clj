@@ -7,7 +7,7 @@
 (defmethod parse-group-update :Group.GroupUpdateAddMembers
   [[_ {{{s :ship n :name} :resource ships :ships} :addMembers}]]
   {:group/update :group.update/add-members
-   :graph/resource (keyword s n)
+   :urbit/resource (keyword s n)
    :group/members ships})
 
 (defmethod parse-group-update :Group.GroupUpdateAddGroup
@@ -15,7 +15,7 @@
         policy :policy
         hidden :hidden} :addGroup}]]
   (-> {:group/update :group.update/add-group
-       :graph/resource (keyword s n)
+       :urbit/resource (keyword s n)
        :group/hidden hidden}
       (merge (parse-policy policy))))
 

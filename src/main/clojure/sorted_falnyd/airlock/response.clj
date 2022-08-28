@@ -150,7 +150,7 @@
     [(m/cata
       {:resource/name ?name
        :resource/ship ?ship
-       :graph/resource (m/app keyword ?ship ?name)
+       :urbit/resource (m/app keyword ?ship ?name)
        & (m/cata !vs)}) ...]
 
     {"json"
@@ -331,7 +331,7 @@
 
     {:graph/group ?group
      :graph/app-name ?app-name
-     :graph/resource ?resource
+     :urbit/resource ?resource
      :metadata/description ?description,
      :metadata/date-created ?date-created
      :metadata/creator ?creator
