@@ -58,7 +58,7 @@
        :graph.post/time-sent time-sent}
     children (assoc :graph.post/children children)
     hash (assoc :graph.post/hash hash)
-    resource (assoc :graph.post/id (str name "/" ship index)
+    resource (assoc :graph.post/id (str ship "/" name index)
                     :graph.resource/name name
                     :graph.resource/ship ship
                     :urbit/resource (keyword ship name))))
