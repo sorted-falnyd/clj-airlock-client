@@ -6,7 +6,7 @@
 
 (defmethod parse-group-update :Group.GroupUpdateAddMembers
   [[_ {{{s :ship n :name} :resource ships :ships} :addMembers}]]
-  {:group/update :group.update/add-members
+  {:urbit.airlock/response :urbit.airlock.group.update/add-members
    :urbit/resource (keyword s n)
    :group/members ships})
 
@@ -14,7 +14,7 @@
   [[_ {{{s :ship n :name} :resource
         policy :policy
         hidden :hidden} :addGroup}]]
-  (-> {:group/update :group.update/add-group
+  (-> {:urbit.airlock/response :urbit.airlock.group.update/add-group
        :urbit/resource (keyword s n)
        :group/hidden hidden}
       (merge (parse-policy policy))))

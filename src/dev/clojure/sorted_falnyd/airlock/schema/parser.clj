@@ -29,10 +29,14 @@
   (group/parse-group-update (:groupUpdate json)))
 
 (defmethod parse-diff "hark-update" [[_ {:keys [json]}]]
-  (mapv hark/parse-hark-update (:more json)))
+  {:urbit.airlock/response :urbit.airlock.hark.update/hark
+   :harks
+   (mapv hark/parse-hark-update (:more json))})
 
 (defmethod parse-diff "dm-hook-action" [[_ {:keys [json]}]]
-  (dm/parse-dm-hook (:dm-hook-action json)))
+  (merge
+   {:urbit.airlock/response :urbit.airlock.dm.hook/action}
+   (dm/parse-dm-hook (:dm-hook-action json))))
 
 (defn go
   ([schema]

@@ -49,11 +49,13 @@
   (reduce-kv
    (fn [m k v]
      (assoc m k (parse-association v)))
-   {}
+   {:urbit.airlock/response :urbit.airlock.metadata.update/initial}
    associations))
 
 (defmethod parse-metadata-update :Metadata.MetadataUpdateAdd [[_ {:keys [add]}]]
-  (parse-association add))
+  (assoc
+   (parse-association add)
+   :urbit.airlock/response :urbit.airlock.metadata.update/add))
 
 (defmethod parse-metadata-update :Metadata.MetadataUpdateUpdate [[_ {}]])
 (defmethod parse-metadata-update :Metadata.MetadataUpdateRemove [[_ {}]])

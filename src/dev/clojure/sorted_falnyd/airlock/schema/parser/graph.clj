@@ -64,12 +64,22 @@
                     :urbit/resource (keyword ship name))))
 
 (defmethod parse-graph-update :add-nodes [[_ {:keys [add-nodes]}]]
-  (let [{:keys [nodes resource]} add-nodes]
-    (reduce-kv (fn [m _ v] (conj m (parse-graph-node (assoc v :resource resource)))) [] nodes)))
+  {:urbit.airlock/response :urbit.airlock.graph.update/add-nodes
+   :nodes
+   (let [{:keys [nodes resource]} add-nodes]
+     (reduce-kv
+      (fn [m _ v]
+        (conj m (parse-graph-node (assoc v :resource resource))))
+      []
+      nodes))})
 
 (defmethod parse-graph-update :add-graph [[_ {:keys [add-graph]}]]
-  (let [{:keys [_mark graph resource]} add-graph]
-    (reduce-kv (fn [m k v] (assoc m k (parse-graph-node (assoc v :resource resource)))) {} graph)))
+  {:urbit.airlock/response :urbit.airlock.graph.update/add-graph
+   :graph
+   (let [{:keys [_mark graph resource]} add-graph]
+     (reduce-kv (fn [m k v] (assoc m k (parse-graph-node (assoc v :resource resource)))) {} graph))})
 
 (defmethod parse-graph-update :keys [[_ {ks :keys}]]
-  (mapv (fn [{:keys [name ship]}] {:urbit/resource (keyword ship name)}) ks))
+  {:urbit.airlock/response :urbit.airlock.graph.update/add-keys
+   :keys
+   (mapv (fn [{:keys [name ship]}] {:urbit/resource (keyword ship name)}) ks)})
