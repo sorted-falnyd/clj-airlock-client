@@ -21,6 +21,20 @@
        :group/hidden hidden}
       (merge (parse-policy policy))))
 
+(defmethod parse-group-update :Group.GroupUpdateInitial
+  [[_ {m :initial}]]
+  {:urbit.airlock/response :urbit.airlock.group.update/initial
+   :groups
+   (reduce-kv
+    (fn [acc k {:keys [members tags policy hidden]}]
+      (conj
+       acc
+       {:group/members members
+        :group/tags tags
+        :urbit/resource (parse-resource k)
+        :group/hidden hidden})
+      (merge (parse-policy policy))) [] m)})
+
 (defmethod parse-policy :Group.OpenPolicy
   [[_ {{ban-ranks :banRanks banned :banned} :open}]]
   {:group/policy :group.policy/open
