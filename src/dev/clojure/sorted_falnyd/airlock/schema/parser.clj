@@ -13,10 +13,28 @@
 (defmulti parse-response first)
 (defmulti parse-diff first)
 
-(defmethod parse-response :poke/ack [[_ v]] v)
-(defmethod parse-response :poke/nack [[_ v]] v)
-(defmethod parse-response :watch/ack [[_ v]] v)
-(defmethod parse-response :watch/nack [[_ v]] v)
+(defmethod parse-response "poke" [[_ [t v]]]
+  (assoc v
+         :urbit.airlock/response
+         (if (identical? t :poke/ack)
+           :urbit.airlock.poke/ack
+           :urbit.airlock.poke/nack)))
+
+(comment
+  (parse-response ["poke" [:poke/ack {:id 1, :response "poke", :ok "ok"}]]))
+
+
+(defmethod parse-response "subscribe" [[_ [t v]]]
+  (assoc v
+         :urbit.airlock/response
+         (if (identical? t :watch/ack)
+           :urbit.airlock.subscribe/ack
+           :urbit.airlock.subscribe/nack)))
+
+(comment
+  (parse-response
+   ["subscribe" [:watch/ack {:id 3, :response "subscribe", :ok "ok"}]]))
+
 (defmethod parse-response "diff" [[_ v]] (parse-diff v))
 
 (defmethod parse-diff "metadata-update-2" [[_ {:keys [json]}]]
