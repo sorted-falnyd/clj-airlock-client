@@ -1,4 +1,6 @@
-(ns sorted-falnyd.airlock.schema.parser.group)
+(ns sorted-falnyd.airlock.schema.parser.group
+  (:require
+   [sorted-falnyd.airlock.schema.parser.urbit :refer [parse-resource]]))
 
 (defmulti parse-group-update first)
 

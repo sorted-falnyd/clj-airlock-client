@@ -1,5 +1,6 @@
 (ns sorted-falnyd.airlock.schema.parser.metadata
-  (:require [clojure.string :as str]))
+  (:require
+   [sorted-falnyd.airlock.schema.parser.urbit :refer [parse-resource]]))
 
 (defmulti parse-metadata-update first)
 
@@ -15,13 +16,6 @@
 (defmethod parse-md-config :Metadata.GraphConfig
   [[_ {:keys [graph]}]]
   {:metadata.config/graph graph})
-
-(defn- parse-resource
-  [r]
-  (cond
-    (string? r) (apply keyword (str/split (str/replace-first r "/ship/~" "") #"/"))
-    (keyword? r) r
-    :else r))
 
 (defn parse-association
   [{resource :resource
