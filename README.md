@@ -66,6 +66,41 @@ incoming messages on the initial subscription channel
 
 Further actions, indexing, etc can be performed by subscribing on it.
 
+### Parsing updates
+
+The updates coming over a channel and responses to HTTP requests are
+structurally encoded.
+
+To get back decoded, tagged data, construct a decoder:
+
+```clojure
+(require '[sorted-falnyd.airlock.schema.parser :as parser])
+(def decoder (parser/decoder))
+```
+
+A successfully decoded datum will return as a tagged tuple, otherwise, a
+map containing the error.
+
+A decoded response can be parsed:
+
+```clojure
+(parser/parse-response (decoder datum))
+```
+
+A parsed response will contain a unique key for each response type,
+`:urbit.airlock/response`.
+
+Further actions can dispatch on the key instead of parsing the data.
+
+#### Currently implemented parsers
+
+- dm hook
+- harks
+- graph update
+- contact update
+- metadata update
+- group update
+
 ## Development
 
 ### Schemas
