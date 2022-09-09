@@ -84,7 +84,7 @@
            [:poke/nack [:map
                        [:id pos-int?]
                        [:response [:= "poke"]]
-                       [:ok string?]]]]
+                       [:err string?]]]]
    "Watch" [:orn
             [:watch/ack [:map
                          [:id pos-int?]
