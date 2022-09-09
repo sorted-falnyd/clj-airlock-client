@@ -72,10 +72,18 @@
 
 (defn response-registry []
   {"Response"
-   [:multi {:dispatch #(or (:response %) (get % "response"))}
-    ["poke" "Poke"]
-    ["subscribe" "Watch"]
-    ["diff" "Diff"]]
+   [:and
+    [:map
+     [:id pos-int?]
+     [:response string?]
+     [:json {:optional true} any?]
+     [:mark {:optional true} string?]
+     [:ok {:optional true} string?]
+     [:err {:optional true} string?]]
+    [:multi {:dispatch :response}
+     ["poke" "Poke"]
+     ["subscribe" "Watch"]
+     ["diff" "Diff"]]]
    "Poke" [:orn
            [:poke/ack [:map
                        [:id pos-int?]
@@ -94,7 +102,7 @@
                           [:id pos-int?]
                           [:response [:= "subscribe"]]
                           [:err string?]]]]
-   "Diff" [:multi {:dispatch #(or (:mark %) (get % "mark"))}
+   "Diff" [:multi {:dispatch :mark}
            ["contact-update-0" [:map
                                 [:id pos-int?]
                                 [:response [:= "diff"]]
