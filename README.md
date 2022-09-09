@@ -20,7 +20,7 @@ WIP
   (api/client
    {:port 80
     ;; :ship-name "sampel-planet"
-    ;; :code "something-important"
+    ;; :code "topse-cret"
     ;; :uri "http://sampel-planet.arvo.network"
     }))
 
