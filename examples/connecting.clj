@@ -1,5 +1,6 @@
 (ns connecting
   (:require
+   [jsonista.core :as json]
    [sorted-falnyd.airlock.action :as action]
    [sorted-falnyd.airlock.graph :as graph]
    [sorted-falnyd.airlock.client.api :as api]
@@ -34,9 +35,19 @@
 
 (map #(get % "json")(filter (fn [x] (= "diff" (get x "response"))) q))
 
+;; Posting
+
 (def r
   (->> [{"text" "Hello, mars"}]
        (graph/make-post "zod")
        (graph/add-post "zod" "my-chat-1686")
        (api/send! conn)))
 (.get r)
+
+
+;; Scrying
+
+(def ks (api/send! conn (graph/-keys)))
+(json/read-value (slurp (.body (.get ks))))
+(def resp (api/send! conn (graph/newest-siblings "zod" "my-chat-1686" 15 "")))
+(json/read-value (slurp (.body (.get resp))))
