@@ -89,4 +89,5 @@
 (defn start!
   [{:keys [sse-connection] :as this}]
   (http/send! this login-poke)
+  (Thread/sleep 1000)
   (assoc this :sse-subscription (sse/connect sse-connection)))
