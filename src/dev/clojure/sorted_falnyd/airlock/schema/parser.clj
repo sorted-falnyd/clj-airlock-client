@@ -5,6 +5,7 @@
    [sorted-falnyd.airlock.schema.parser.group :as group]
    [sorted-falnyd.airlock.schema.parser.hark :as hark]
    [sorted-falnyd.airlock.schema.parser.dm-hook :as dm]
+   [sorted-falnyd.airlock.schema.parser.contact :as contact]
    [malli.core :as m]
    [malli.transform :as mt]
    [clojure.walk :as walk]
@@ -55,6 +56,9 @@
   (merge
    {:urbit.airlock/response :urbit.airlock.dm.hook/action}
    (dm/parse-dm-hook (:dm-hook-action json))))
+
+(defmethod parse-diff "contact-update-0" [[_ o]]
+  (contact/parse-contact-update o))
 
 (defn go
   ([schema]
