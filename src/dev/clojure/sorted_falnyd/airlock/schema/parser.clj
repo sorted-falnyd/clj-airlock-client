@@ -57,8 +57,8 @@
    {:urbit.airlock/response :urbit.airlock.dm.hook/action}
    (dm/parse-dm-hook (:dm-hook-action json))))
 
-(defmethod parse-diff "contact-update-0" [[_ o]]
-  (contact/parse-contact-update o))
+(defmethod parse-diff "contact-update-0" [[_ {:keys [json]}]]
+  (contact/parse-contact-update (:contact-update json)))
 
 (defn go
   ([schema]
