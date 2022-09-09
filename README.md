@@ -11,48 +11,48 @@ WIP
 ```clojure
 (ns user
   (:require
-   [sorted-falnyd.airlock.ship :as ship]
-   [sorted-falnyd.airlock.connection :as conn]
-   [sorted-falnyd.airlock.http :as http]
-   [sorted-falnyd.airlock.action :as action]
-   [sorted-falnyd.airlock.graph :as graph]
-   [clojure.core.async :as a]))
+   [sorted-falnyd.airlock.client.api :as api]))
 ```
 ### Set up a connection
 
 ```clojure
 (def conn
-  (->
-   {}
-   ship/make-ship
-   ship/login!
-   conn/make-connection
-   conn/build!
-   conn/start!))
+  (api/client
+   {:port 80
+    ;; :ship-name "sampel-planet"
+    ;; :code "something-important"
+    ;; :uri "http://sampel-planet.arvo.network"
+    }))
+
 ```
 
 ### Actions
 
+```clojure
+(require '[sorted-falnyd.airlock.action :as action])
+```
+
 #### Poke
 
 ```clojure
-(http/send! conn (action/poke "hood" "helm-hi" "Knock knock"))
+(api/send! conn (action/poke "hood" "helm-hi" "Knock knock"))
 ```
 
 #### Subscribe
 
 ```clojure
-(http/send! conn (action/subscribe "graph-store" "/updates"))
-(http/send! conn (action/subscribe "metadata-store" "/all"))
+(api/send! conn (action/subscribe "graph-store" "/updates"))
+(api/send! conn (action/subscribe "metadata-store" "/all"))
 ```
 
 #### Send posts
 
 ```clojure
+(require '[sorted-falnyd.airlock.graph :as graph])
 (->> [{:text "I am the post"}]
      (graph/make-post "zod")
      (graph/add-post "zod" "my-chat-1686")
-     (http/send! conn))
+     (api/send! conn))
 ```
 
 ### Channel
