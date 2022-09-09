@@ -121,6 +121,6 @@ Merge the registries and parse incoming events
 
 ## License
 
-Copyright © 2021 sorted-falnyd
+Copyright © 2021-2022 sorted-falnyd
 
 Distributed under the Eclipse Public License version 1.0.
