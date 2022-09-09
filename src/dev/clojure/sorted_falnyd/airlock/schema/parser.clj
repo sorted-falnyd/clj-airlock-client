@@ -6,10 +6,9 @@
    [sorted-falnyd.airlock.schema.parser.hark :as hark]
    [sorted-falnyd.airlock.schema.parser.dm-hook :as dm]
    [sorted-falnyd.airlock.schema.parser.contact :as contact]
+   [sorted-falnyd.airlock.schema.parser.registry :as reg]
    [malli.core :as m]
-   [malli.transform :as mt]
-   [clojure.walk :as walk]
-   [clojure.edn :as edn]))
+   [malli.transform :as mt]))
 
 (defmulti parse-response first)
 (defmulti parse-diff first)
@@ -60,7 +59,8 @@
 (defmethod parse-diff "contact-update-0" [[_ {:keys [json]}]]
   (contact/parse-contact-update (:contact-update json)))
 
-(defn go
+(defn decoder
+  ([] (decoder [:schema {:registry (reg/master-registry)} "Response"]))
   ([schema]
    (let [schema (m/schema schema)
          decoder (m/decoder schema (mt/transformer
@@ -74,47 +74,4 @@
            (explainer x)
            ret)))))
   ([schema value]
-   ((go schema) value)))
-
-(defn provide-groups
-  [p g]
-  (reduce-kv (fn [m k v] (assoc m k (p v))) {} g))
-
-(comment
-  (require 'malli.provider)
-
-  (def provider (malli.provider/provider))
-
-  (def updates (edn/read-string (slurp "updates.edn")))
-  (def updates2 (edn/read-string (slurp "updates2.edn")))
-  (require '[sorted-falnyd.airlock.schema.parser.registry :as reg])
-  (def reg (reg/master-registry))
-  (def f (go [:schema {:registry reg} "Response"]))
-
-  (remove :schema (mapv f updates2))
-  (go [:schema {:registry reg} "Group.GroupUpdateInitial"]
-      {"initial"
-       {"/ship/~zod/group-1"
-        {"members" ["zod" "bus"],
-         "tags" {"admin" ["zod"]},
-         "policy" {"open" {"banRanks" [], "banned" []}},
-         "hidden" false}}}, ,)
-
-
-  (provide-groups
-   provider
-   (group-by :mark (keep (comp walk/keywordize-keys :value f) updates)))
-
-  (parse-response
-   ["diff"
-    ["dm-hook-action"
-     {:json {:dm-hook-action {:pendings ["bus"]}},
-      :id 13,
-      :response "diff",
-      :mark "dm-hook-action"}]])
-
-  (let [d (remove :value  (map f updates))]
-    (map parse-response d))
-
-  )
-
+   ((decoder schema) value)))
