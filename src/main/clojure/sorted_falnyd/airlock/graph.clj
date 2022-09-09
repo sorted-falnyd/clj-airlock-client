@@ -1,4 +1,5 @@
 (ns sorted-falnyd.airlock.graph
+  "Constructors for Graph Store actions."
   (:require
    [sorted-falnyd.airlock.util :as u]
    [sorted-falnyd.airlock.action :as action]

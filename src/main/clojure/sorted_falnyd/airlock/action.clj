@@ -1,4 +1,7 @@
 (ns sorted-falnyd.airlock.action
+  "Action constructors.
+
+  Should be sent to a connection via `send!`."
   (:require
    [clojure.spec.alpha :as s]
    [sorted-falnyd.airlock.spec :as as])
@@ -62,6 +65,9 @@
 (defmethod action-spec :subscribe [_] :action/subscribe)
 
 (defn subscribe
+  "Subscribe to `app` on `path`.
+  Example:
+  (subscribe \"graph-store\" \"/updates\")"
   [app path]
   {:action :subscribe
    :app app
@@ -80,6 +86,8 @@
 (defmethod action-spec :ack [_] :action/ack)
 
 (defn ack
+  "Ack `event-id`.
+  Sent automatically by a client."
   [event-id]
   {:event-id event-id
    :action :ack})
@@ -117,6 +125,8 @@
 ;;; Scry
 
 (defn scry
+  "Scry an `app` on `path`.
+  Useful by more advanced constructors."
   [app path]
   {:action :scry
    :app app
