@@ -2,10 +2,7 @@
   (:require
    [sorted-falnyd.airlock.ship :as ship]
    [sorted-falnyd.airlock.connection :as conn]
-   [sorted-falnyd.airlock.http :as http]
-   [sorted-falnyd.airlock.action :as action]
-   [sorted-falnyd.airlock.graph :as graph]
-   [clojure.core.async :as a]))
+   [sorted-falnyd.airlock.http :as http]))
 
 (defn client
   ([] (client {}))
