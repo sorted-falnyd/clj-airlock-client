@@ -1,3 +1,6 @@
+[![Clojars Project](https://img.shields.io/clojars/v/io.github.sorted-falnyd/clj-airlock-api.svg)](https://clojars.org/io.github.sorted-falnyd/clj-airlock-api)
+[![CI Status](https://img.shields.io/endpoint.svg?url=https%3A%2F%2Factions-badge.atrox.dev%2Fatrox%2Fsync-dotenv%2Fbadge&style=flat)](https://actions-badge.atrox.dev/atrox/sync-dotenv/goto)
+
 # io.github.sorted-falnyd/clj-airlock-api
 
 Urbit Airlock API implementation in Clojure
@@ -5,6 +8,18 @@ Urbit Airlock API implementation in Clojure
 WIP
 
 ## Usage
+
+### Leiningen
+
+```clojure
+[io.github.sorted-falnyd/clj-airlock-api "0.0.66-SNAPSHOT"]
+```
+
+### Deps
+
+```clojure
+io.github.sorted-falnyd/clj-airlock-api {:mvn/version "0.0.66-SNAPSHOT"}
+```
 
 ### Require
 
