@@ -12,13 +12,13 @@ WIP
 ### Leiningen
 
 ```clojure
-[io.github.sorted-falnyd/clj-airlock-api "0.0.66-SNAPSHOT"]
+[io.github.sorted-falnyd/clj-airlock-api "..."]
 ```
 
 ### Deps
 
 ```clojure
-io.github.sorted-falnyd/clj-airlock-api {:mvn/version "0.0.66-SNAPSHOT"}
+io.github.sorted-falnyd/clj-airlock-api {:mvn/version "..."}
 ```
 
 ### Require
