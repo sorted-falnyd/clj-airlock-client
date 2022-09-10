@@ -5,7 +5,7 @@
   <artifactId>clj-airlock-api</artifactId>
   <version>0.1.0-SNAPSHOT</version>
   <name>io.github.sorted-falnyd/clj-airlock-api</name>
-  <description>FIXME: my new library.</description>
+  <description>Urbit Airlock API client in Clojure.</description>
   <url>https://github.com/sorted-falnyd/clj-airlock-api</url>
   <licenses>
     <license>
