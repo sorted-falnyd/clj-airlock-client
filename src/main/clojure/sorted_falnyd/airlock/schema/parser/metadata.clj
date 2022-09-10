@@ -53,6 +53,22 @@
    (parse-association add)
    :urbit.airlock/response :urbit.airlock.metadata.update/add))
 
-(defmethod parse-metadata-update :Metadata.MetadataUpdateUpdate [[_ {}]])
-(defmethod parse-metadata-update :Metadata.MetadataUpdateRemove [[_ {}]])
-(defmethod parse-metadata-update :Metadata.MetadataUpdateEdit [[_ {}]])
+(defmethod parse-metadata-update :Metadata.MetadataUpdateUpdate [[_ {u :update}]]
+  (assoc
+   (parse-association (parse-association u))
+   :urbit.airlock/response :urbit.airlock.metadata.update/update))
+
+(defmethod parse-metadata-update :Metadata.MetadataUpdateRemove [[_ {{:keys [resource group]} :remove}]]
+  (cond->
+      {:urbit.airlock/response :urbit.airlock.metadata.update/remove
+       :urbit/resource (parse-resource resource)}
+    group (assoc :graph/group [:urbit/resource (parse-resource group)])))
+
+(defmethod parse-metadata-update :Metadata.MetadataUpdateEdit [[_ {{:keys [resource group edit]} :edit}]]
+  (-> edit
+      (update-keys #(keyword "metadata" (name %)))
+      (assoc
+       :urbit.airlock/response :urbit.airlock.metadata.update/edit
+       :urbit/resource (parse-resource resource))
+      (cond->
+          group (assoc :graph/group [:urbit/resource (parse-resource group)]))))
