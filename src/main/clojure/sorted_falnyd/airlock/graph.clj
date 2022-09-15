@@ -6,6 +6,7 @@
    [clojure.string :as str]))
 
 (defn make-post
+  "Create a graph store post"
   ([author contents] (make-post author contents nil))
   ([author contents {:keys [parent-index index now]
               :or {parent-index ""}}]
@@ -17,6 +18,29 @@
       :contents contents
       :signatures []
       :hash nil})))
+
+(defn new-post
+  "Create a notebook post"
+  ([author title body] (new-post author title body nil))
+  ([author title body {:keys [now]}]
+   (let [now (or now (System/currentTimeMillis))
+         da (u/unix->da now)
+         index (str "/" da)
+         root (make-post author [] {:now now :index da})
+         rev-container (assoc root :index (str index "/1"))
+         comments-container (assoc root :index (str index "/2"))
+         first-rev (assoc rev-container
+                          :contents (into [{:text title}] body)
+                          :index (str (:index rev-container) "/1"))
+         ]
+     {index
+      {:post root
+       :children
+       {"1" {:post rev-container
+             :children {"1" {:post first-rev
+                             :children nil}}}
+        "2" {:post comments-container
+             :children nil}}}})))
 
 (def graph-update-version 3)
 (def graph-update-mark (str "graph-update-" graph-update-version))
