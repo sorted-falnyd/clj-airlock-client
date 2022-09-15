@@ -35,7 +35,8 @@
 
 (map #(get % "json")(filter (fn [x] (= "diff" (get x "response"))) q))
 
-;; Posting
+;; Low level posting
+
 
 (def r
   (->> [{"text" "Hello, mars"}]
