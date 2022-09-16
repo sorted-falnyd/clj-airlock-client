@@ -27,9 +27,10 @@
   {:deps {org.babashka/cli {:mvn/version "0.2.11"}
           io.github.borkdude/quickdoc
           {:deps/root "jvm"
-           :git/sha "c5320cbe311b651a60b47f4d00d7e8ab63291b6e"}}
+           :git/sha "4f50015cd44613780327acf412d9edb9a1010343"}}
    :exec-args {:github/repo "https://github.com/sorted-falnyd/clj-airlock-client"
-               :git/branch "master"}
+               :git/branch "master"
+               :toc true}
    :main-opts ["-m" "babashka.cli.exec" "quickdoc.api" "quickdoc"]}
   :build {:deps {io.github.seancorfield/build-clj
                  {:git/tag "v0.6.2" :git/sha "97c275a"}}
