@@ -9,6 +9,17 @@
     (keyword? r) r
     :else r))
 
+(defn unparse-resource
+  [r]
+  (cond
+    (map? r) r
+    (string? r) (let [[name ship] (-> r
+                                      (str/replace-first #"(/ship/)?~" "")
+                                      (str/split #"/"))]
+                  #:resource{:name name :ship ship})
+    (keyword? r) #:resource{:name (name r) :ship (namespace r)}
+    :else r))
+
 (defn parse-ship
   [r]
   (cond
