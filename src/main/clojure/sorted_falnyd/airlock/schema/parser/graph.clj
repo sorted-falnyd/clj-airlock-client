@@ -32,7 +32,7 @@
 
 (defmethod parse-graph-reference :Graph.AppReference [[_ {:keys [app]}]]
   {:graph.post.content/reference app
-   :graph.post.content/type :graph.post.content.type/graph-reference})
+   :graph.post.content/type :graph.post.content.type/app-reference})
 
 (defmethod parse-graph-reference :Graph.GroupReference [[_ {:keys [group]}]]
   {:graph.post.content/reference group
