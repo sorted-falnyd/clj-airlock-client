@@ -60,3 +60,30 @@
   (let [{:keys [post/indices resource/ship resource/name]}
         (prepare-opts conn opts)]
     (api/send! (graph/remove-posts ship name indices))))
+
+(defn post-link!
+  "Post a link to a collection with optional title."
+  {:argslists
+   '([conn {:keys [post/author resource/name resource/ship post/title post/url]}])}
+  [conn opts]
+  (let [{:keys [post/author resource/name resource/ship post/title post/url]}
+        (prepare-opts conn opts)]
+    (->> [{:text (or title "")} {:url url}]
+         (graph/make-post author)
+         (graph/add-post ship name)
+         (api/send! conn))))
+
+(defn comment!
+  "Comment on post with `parent-index`.
+  Otherwise similar to [[post!]]"
+  {:arglists
+   '([conn
+      parent-index
+      [post/author resource/name resource/ship post/contents]])}
+  [conn parent-index opts]
+  (let [{:keys [post/author resource/name resource/ship post/contents]}
+        (prepare-opts conn opts)]
+    (->> contents
+         (graph/new-comment author parent-index)
+         (graph/add-nodes ship name)
+         (api/send! conn))))

@@ -42,6 +42,22 @@
         "2" {:post comments-container
              :children nil}}}})))
 
+(defn new-comment
+  ([author parent-index contents]
+   (new-comment author parent-index contents nil))
+  ([author parent-index contents {:keys [now]}]
+   (let [root (make-post author [] {:parent-index parent-index
+                                    :now now})
+         index (:index root)
+         child (make-post author contents {:parent-index index
+                                           :index 1})]
+     {index
+      {:post root
+       :children {"1" child}}})))
+
+(comment
+  (new-comment "zod" "/170141184505835126397402222553603244032" [{:text "yes.jpg"}]))
+
 (def graph-update-version 3)
 (def graph-update-mark (str "graph-update-" graph-update-version))
 

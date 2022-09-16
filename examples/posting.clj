@@ -54,3 +54,8 @@
    conn
    {:post/content [{"text" "Hello, Mars!"}]}))
 
+
+(graph.api/with-resource #:resource{:name "coll-9061" :ship "zod"}
+  (graph.api/post-link!
+   conn
+   #:post{:title "Instaparse" :url "https://clojars.org/instaparse"}))
