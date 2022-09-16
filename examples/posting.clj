@@ -27,3 +27,30 @@
     :post/body [{"text" "Hello, mars"}]
     :resource/name "the-notebook-1437"
     :resource/ship "zod"}))
+
+;;; Author taken from connection
+
+(def r
+  (graph.api/chat!
+   conn
+   {:post/content [{"text" "Hello, mars"}]
+    :resource/name "channel-1-6870"
+    :resource/ship "zod"}))
+
+(def r
+  (graph.api/post!
+   conn
+   {:post/title "Hello world!"
+    :post/body [{"text" "Hello, mars"}]
+    :resource/name "the-notebook-1437"
+    :resource/ship "zod"}))
+
+
+;;; Dynamic resource
+
+(graph.api/with-resource {:resource/name "channel-1-6870"
+                          :resource/ship "zod"}
+  (graph.api/chat!
+   conn
+   {:post/content [{"text" "Hello, Mars!"}]}))
+
