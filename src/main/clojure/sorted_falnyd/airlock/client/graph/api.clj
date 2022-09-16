@@ -18,9 +18,9 @@
      ~@body))
 
 (defn- prepare-opts
-  [opts]
+  [{:keys [ship-name] :as _conn} opts]
   (merge
-   {:post/author *author*}
+   {:post/author (or *author* ship-name)}
    (unparse-resource *resource*)
    opts))
 
@@ -28,10 +28,11 @@
   {:argslists
    '([conn {:keys [post/author resource/name resource/ship post/content]}])}
   "Post to a chat with connection.
-  Author and resource can be dynamically bound, but will take precedence if present in `opts`."
+  Author and resource can be dynamically bound, but will take precedence if present in `opts`.
+  If no author is provided, it will be taken from `:ship-name` in `conn`."
   [conn opts]
   (let [{:keys [post/author resource/name resource/ship post/content]}
-        (prepare-opts opts)]
+        (prepare-opts conn opts)]
     (->> content
          (graph/make-post author)
          (graph/add-post ship name)
@@ -41,10 +42,11 @@
   {:arglists
    '([conn {:keys [post/author resource/name resource/ship post/title post/body] :as opts}])}
   "Post to a notebook with connection.
-  Author and resource can be dynamically bound, but will take precedence if present in `opts`."
+  Author and resource can be dynamically bound, but will take precedence if present in `opts`.
+  If no author is provided, it will be taken from `:ship-name` in `conn`."
   [conn opts]
   (let [{:keys [post/author resource/name resource/ship post/title post/body]}
-        (prepare-opts opts)]
+        (prepare-opts conn opts)]
     (->> body
          (graph/new-post author title)
          (graph/add-nodes ship name)
