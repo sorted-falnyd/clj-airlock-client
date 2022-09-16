@@ -51,3 +51,12 @@
          (graph/new-post author title)
          (graph/add-nodes ship name)
          (api/send! conn))))
+
+(defn remove!
+  "Remove posts from resource by indices."
+  {:arglists
+   '([conn {:keys [post/indices resource/ship resource/name]}])}
+  [conn opts]
+  (let [{:keys [post/indices resource/ship resource/name]}
+        (prepare-opts conn opts)]
+    (api/send! (graph/remove-posts ship name indices))))
