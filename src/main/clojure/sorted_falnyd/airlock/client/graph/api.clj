@@ -8,12 +8,12 @@
 (def ^:dynamic *resource* nil)
 
 (defmacro with-author
-  [name body]
+  [name & body]
   `(binding [*author* ~name]
      ~@body))
 
 (defmacro with-resource
-  [resource body]
+  [resource & body]
   `(binding [*resource* ~resource]
      ~@body))
 
