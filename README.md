@@ -70,6 +70,35 @@ io.github.sorted-falnyd/clj-airlock-api {:mvn/version "..."}
      (api/send! conn))
 ```
 
+#### Convenient posting
+
+```clojure
+(require '[sorted-falnyd.airlock.client.graph.api :as graph.api])
+
+
+(graph.api/chat!
+ conn
+ {:post/content [{"text" "Hello, mars"}]
+  :resource/name "channel-1-6870"
+  :resource/ship "zod"})
+  
+;;; Or bind the resource dynamically
+
+(graph.api/with-resource #:resource{:name "channel-1-6870", :ship "zod"}
+  (graph.api/chat!
+   conn
+   {:post/content [{"text" "Hello, Mars!"}]}))
+   
+;;; Author can be explicitly stated
+
+(graph.api/chat!
+ conn
+ {:post/author "zod"
+  :post/content [{"text" "Hello, mars"}]
+  :resource/name "channel-1-6870"
+  :resource/ship "zod"})
+```
+
 ### Channel
 
 The connection map contains a core.async channel which receives *all*
