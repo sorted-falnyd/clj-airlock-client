@@ -388,7 +388,7 @@ Post to a chat with connection.
 ## `comment!`
 ``` clojure
 
-(comment! conn parent-index opts)
+(comment! conn parent-index [post/author resource/name resource/ship post/contents])
 ```
 
 
@@ -398,7 +398,7 @@ Comment on post with `parent-index`.
 ## `post!`
 ``` clojure
 
-(post! conn opts)
+(post! conn {:as opts, :keys [post/author resource/name resource/ship post/title post/body]})
 ```
 
 
@@ -418,7 +418,7 @@ Post a link to a collection with optional title.
 ## `remove!`
 ``` clojure
 
-(remove! conn opts)
+(remove! conn {:keys [post/indices resource/ship resource/name]})
 ```
 
 

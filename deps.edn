@@ -27,7 +27,7 @@
   {:deps {org.babashka/cli {:mvn/version "0.2.11"}
           io.github.borkdude/quickdoc
           {:deps/root "jvm"
-           :git/sha "4f50015cd44613780327acf412d9edb9a1010343"}}
+           :git/sha "5739942b8c636355a9a307064b4e5e35e424686d"}}
    :exec-args {:github/repo "https://github.com/sorted-falnyd/clj-airlock-client"
                :git/branch "master"
                :toc true}
