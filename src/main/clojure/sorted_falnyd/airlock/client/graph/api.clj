@@ -25,11 +25,11 @@
    opts))
 
 (defn chat!
-  {:argslists
-   '([conn {:keys [post/author resource/name resource/ship post/content]}])}
   "Post to a chat with connection.
   Author and resource can be dynamically bound, but will take precedence if present in `opts`.
   If no author is provided, it will be taken from `:ship-name` in `conn`."
+  {:argslists
+   '([conn {:keys [post/author resource/name resource/ship post/content]}])}
   [conn opts]
   (let [{:keys [post/author resource/name resource/ship post/content]}
         (prepare-opts conn opts)]
@@ -39,11 +39,11 @@
          (api/send! conn))))
 
 (defn post!
-  {:arglists
-   '([conn {:keys [post/author resource/name resource/ship post/title post/body] :as opts}])}
   "Post to a notebook with connection.
   Author and resource can be dynamically bound, but will take precedence if present in `opts`.
   If no author is provided, it will be taken from `:ship-name` in `conn`."
+  {:arglists
+   '([conn {:keys [post/author resource/name resource/ship post/title post/body] :as opts}])}
   [conn opts]
   (let [{:keys [post/author resource/name resource/ship post/title post/body]}
         (prepare-opts conn opts)]
