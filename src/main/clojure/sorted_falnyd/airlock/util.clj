@@ -9,10 +9,12 @@
 (def offset (/ da-second 2000N))
 
 (defn da->unix
+  "Convert Urbit date to Unix Epoch."
   [da]
   (/ (*' (+' offset (-' da da-unix-epoch)) 1000N) da-second))
 
 (defn unix->da
+  "Convert Unix Epoch to Urbit date."
   [t]
   (-> t
       bigint
@@ -26,12 +28,14 @@
   (-> (System/currentTimeMillis) unix->da))
 
 (defn ensig
+  "Ensure a ship name starts with `~`."
   [ship]
   (if (str/starts-with? ship "~")
     ship
     (str "~" ship)))
 
 (defn desig
+  "Ensure a ship name does not start with `~`."
   [ship]
   (if (str/starts-with? ship "~")
     (subs ship 1)
