@@ -163,6 +163,16 @@ Parse the schema to a basic malli schema
 
 Merge the registries and parse incoming events
 
+### Adding a parser
+
+All unqualified function names refer to the `sorted-falnyd.airlock.schema.parser.registry` namespace.
+
+- Add a registry. Either from JSON schema or write one out manually.
+- Add a dispatch value for the new mark under `"Diff"` in `response-registry`.
+- Load your registry in `master-registry`.
+- Add a `sorted-falnyd.airlock.schema.parser/parse-diff` implementation for the new mark.
+- Make sure the parsed response contains the key `:urbit.airlock/response`.
+
 ## License
 
 Copyright © 2021-2022 sorted-falnyd
