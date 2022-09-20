@@ -174,19 +174,19 @@
 -  [`sorted-falnyd.airlock.util`](#sorted-falnydairlockutil) 
     -  [`-str`](#-str)
     -  [`counter`](#counter-1)
-    -  [`da->unix`](#da->unix)
+    -  [`da->unix`](#da->unix) - Convert Urbit date to Unix Epoch.
     -  [`da-second`](#da-second)
     -  [`da-time`](#da-time)
     -  [`da-unix-epoch`](#da-unix-epoch)
     -  [`dec->ud`](#dec->ud)
     -  [`decode-resource`](#decode-resource)
-    -  [`desig`](#desig)
-    -  [`ensig`](#ensig)
+    -  [`desig`](#desig) - Ensure a ship name does not start with <code>~</code>.
+    -  [`ensig`](#ensig) - Ensure a ship name starts with <code>~</code>.
     -  [`into-string`](#into-string)
     -  [`offset`](#offset)
     -  [`remove-nils`](#remove-nils)
     -  [`sbrf`](#sbrf)
-    -  [`unix->da`](#unix->da)
+    -  [`unix->da`](#unix->da) - Convert Unix Epoch to Urbit date.
     -  [`uri`](#uri)
 # sorted-falnyd.airlock.action 
 
@@ -1335,7 +1335,7 @@ Build request to obtain a cookie
 (-str x & xs)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L57-L62)</sub>
+<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L61-L66)</sub>
 ## `counter`
 <sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L6-L6)</sub>
 ## `da->unix`
@@ -1344,7 +1344,9 @@ Build request to obtain a cookie
 (da->unix da)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L11-L13)</sub>
+
+Convert Urbit date to Unix Epoch.
+<br><sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L11-L14)</sub>
 ## `da-second`
 <sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L8-L8)</sub>
 ## `da-time`
@@ -1353,7 +1355,7 @@ Build request to obtain a cookie
 (da-time)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L24-L26)</sub>
+<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L26-L28)</sub>
 ## `da-unix-epoch`
 <sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L7-L7)</sub>
 ## `dec->ud`
@@ -1362,35 +1364,39 @@ Build request to obtain a cookie
 (dec->ud s)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L52-L54)</sub>
+<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L56-L58)</sub>
 ## `decode-resource`
 ``` clojure
 
 (decode-resource s)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L64-L73)</sub>
+<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L68-L77)</sub>
 ## `desig`
 ``` clojure
 
 (desig ship)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L34-L38)</sub>
+
+Ensure a ship name does not start with `~`.
+<br><sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L37-L42)</sub>
 ## `ensig`
 ``` clojure
 
 (ensig ship)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L28-L32)</sub>
+
+Ensure a ship name starts with `~`.
+<br><sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L30-L35)</sub>
 ## `into-string`
 ``` clojure
 
 (into-string xf s)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L45-L47)</sub>
+<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L49-L51)</sub>
 ## `offset`
 <sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L9-L9)</sub>
 ## `remove-nils`
@@ -1399,7 +1405,7 @@ Build request to obtain a cookie
 (remove-nils m)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L79-L81)</sub>
+<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L83-L85)</sub>
 ## `sbrf`
 ``` clojure
 
@@ -1408,18 +1414,20 @@ Build request to obtain a cookie
 (sbrf sb x)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L40-L43)</sub>
+<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L44-L47)</sub>
 ## `unix->da`
 ``` clojure
 
 (unix->da t)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L15-L22)</sub>
+
+Convert Unix Epoch to Urbit date.
+<br><sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L16-L24)</sub>
 ## `uri`
 ``` clojure
 
 (uri & args)
 ```
 
-<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L75-L77)</sub>
+<sub>[source](https://github.com/sorted-falnyd/clj-airlock-client/blob/master/src/main/clojure/sorted_falnyd/airlock/util.clj#L79-L81)</sub>
