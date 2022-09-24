@@ -42,12 +42,6 @@
   [[_ o]]
   (parse-graph-reference (:reference o)))
 
-(defn -graph-key
-  [name ship]
-  {:urbit/resource (keyword ship name)
-   :graph.resource/name name
-   :graph.resource/ship [:urbit/ship ship]})
-
 (defn parse-graph-node
   [{children :children
     {:keys [index signatures hash author time-sent contents]} :post
@@ -64,8 +58,10 @@
        :graph.post/time-sent time-sent}
     children (assoc :graph.post/children children)
     hash (assoc :graph.post/hash hash)
-    resource (-> (assoc :graph.post/id (str ship "/" name index))
-                 (conj (-graph-key name ship)))))
+    resource (assoc :graph.post/id (str ship "/" name index)
+                    :graph/resource [:urbit/resource (keyword ship name)]
+                    :graph.resource/name name
+                    :graph.resource/ship [:urbit/ship ship])))
 
 (defmethod parse-graph-update :add-nodes [[_ {:keys [add-nodes]}]]
   {:urbit.airlock/response :urbit.airlock.graph.update/add-nodes
@@ -85,4 +81,8 @@
 
 (defmethod parse-graph-update :keys [[_ {ks :keys}]]
   {:urbit.airlock/response :urbit.airlock.graph.update/add-keys
-   :keys (mapv (fn [{:keys [name ship]}] (-graph-key name ship)) ks)})
+   :keys (mapv (fn [{:keys [name ship]}]
+                 {:urbit/resource (keyword ship name)
+                  :graph.resource/name name
+                  :graph.resource/ship [:urbit/ship ship]}) ks)})
+
