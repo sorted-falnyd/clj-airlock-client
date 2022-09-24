@@ -1,6 +1,9 @@
 (ns sorted-falnyd.airlock.schema.parser.metadata
   (:require
-   [sorted-falnyd.airlock.schema.parser.urbit :refer [parse-resource]]))
+   [sorted-falnyd.airlock.schema.parser.urbit
+    :refer
+    [parse-resource
+     parse-ship]]))
 
 (defmulti parse-metadata-update first)
 
@@ -27,7 +30,7 @@
     :urbit/resource (parse-resource resource)
     :metadata/description description,
     :metadata/date-created date-created
-    :metadata/creator creator
+    :metadata/creator [:urbit/ship (parse-ship creator)]
     :metadata/color color
     :metadata/title title,
     :metadata/preview preview,
