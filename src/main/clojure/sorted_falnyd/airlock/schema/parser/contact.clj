@@ -28,7 +28,7 @@
 
 (defmethod parse-contact-update :Contact.ContactUpdateInitial [[_ {:keys [initial]}]]
   {:urbit.airlock/response :urbit.airlock.contact.update/initial
-   :contacts (parse-rolodex initial)})
+   :contacts (parse-rolodex (:rolodex initial))})
 
 (defmethod parse-contact-update :Contact.ContactUpdateAdd
   [[_ {{:keys [ship contact]} :add}]]
