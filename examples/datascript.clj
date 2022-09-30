@@ -10,9 +10,10 @@
    [datascript.core :as d]))
 
 (comment
-  (def client (api/client {:port 80})))
-
-(require '[home :refer [client]])
+  ;;; either
+  (def client (api/client {:port 80}))
+  ;;; or
+  (require '[home :refer [client]]))
 
 (comment
   (api/send! client (action/delete))
