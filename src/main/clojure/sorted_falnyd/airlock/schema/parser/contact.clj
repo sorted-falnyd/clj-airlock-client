@@ -6,15 +6,15 @@
 
 (defn parse-contact
   [{:keys [cover bio nickname avatar last-updated status color groups]}]
-  #:contact{:cover cover
-            :bio bio
-            :nickname nickname
-            :avatar avatar
-            :last-updated last-updated
-            :status status
-            :color color
-            :groups (mapv parse-resource groups)}
-  )
+  (cond->
+      #:contact{:bio bio
+                :nickname nickname
+                :last-updated last-updated
+                :status status
+                :color color
+                :groups (mapv parse-resource groups)}
+    cover (assoc :contact/cover cover)
+    avatar (assoc :contact/avatar avatar)))
 
 (defn parse-rolodex
   [dex]
