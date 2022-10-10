@@ -28,7 +28,7 @@
   "Post to a chat with connection.
   Author and resource can be dynamically bound, but will take precedence if present in `opts`.
   If no author is provided, it will be taken from `:ship-name` in `conn`."
-  {:argslists
+  {:arglists
    '([conn {:keys [post/author resource/name resource/ship post/content]}])}
   [conn opts]
   (let [{:keys [post/author resource/name resource/ship post/content]}
