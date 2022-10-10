@@ -36,8 +36,9 @@
   {:urbit.airlock/response :urbit.airlock/unrecognized
    :response o})
 
+(defn decode+parse [x] (-> x decoder parser/parse-response))
 
-(mapv parser/parse-response (mapv decoder (deref recording)))
+(mapv decode+parse (deref recording))
 
 (def meta-resp
   (api/send! client (action/subscribe "metadata-store" "/all")))
@@ -49,6 +50,8 @@
   (api/send! client (action/subscribe "graph-store" "/updates")))
 
 (defmulti handle-response (fn [_conn m] (:urbit.airlock/response m)))
+
+(methods handle-response)
 
 (defn -entity-ref?
   [%]
@@ -79,30 +82,69 @@
   [conn m]
   (d/transact! conn (-facts-and-refs (:nodes m))))
 
+(defmethod handle-response :urbit.airlock.graph.update/remove-posts
+  [conn {:keys [indices]}]
+  (->> indices
+       (mapv (fn [{:graph.post/keys [id]}] [:db/retract [:graph.post/id id]]))
+       (d/transact! conn)))
+
 (def schema {
-             :graph.post/id {:db/unique :db.unique/identity}
+             :graph.post/id {:db/unique :db.unique/identity :db/index true}
              :graph.post/signatures {:db/cardinality :db.cardinality/many}
-             :graph.resource/ship {:db/valueType :db.type/ref},
-             :graph/group {:db/valueType :db.type/ref}
-             :graph/resource {:db/valueType :db.type/ref},
+             :graph.resource/ship {:db/valueType :db.type/ref :db/index true},
+             :graph.post/author {:db/valueType :db.type/ref :db/index true}
+             :graph/group {:db/valueType :db.type/ref :db/index true}
+             :graph/resource {:db/valueType :db.type/ref :db/index true},
 
              :group.policy/ban-ranks {:db/cardinality :db.cardinality/many},
              :group.policy/banned {:db/cardinality :db.cardinality/many}
              :group/members {:db/cardinality :db.cardinality/many}
 
-             :metadata/creator {:db/valueType :db.type/ref},
+             :metadata/creator {:db/valueType :db.type/ref :db/index true},
 
-             :urbit/resource {:db/unique :db.unique/identity}
-             :urbit/ship {:db/unique :db.unique/identity}
+             :urbit/resource {:db/unique :db.unique/identity :db/index true}
+             :urbit/ship {:db/unique :db.unique/identity :db/index true}
              })
 
 (def conn (d/create-conn schema))
 
-(def md (first (filter :metadata/associations (mapv parser/parse-response (mapv decoder (deref recording))))))
+;;; Look at data
+(->> recording
+     deref
+     (mapv decode+parse))
 
-(handle-response conn md)
+;;; Ingest data
+(doseq [resp
+        (->> recording
+             deref
+             (mapv decode+parse)
+             (filter (comp (methods handle-response) :urbit.airlock/response)))]
+  (handle-response conn resp))
 
-(d/entid (d/db conn) [:urbit/ship "zod"])
+
+;;; All resources
+(d/datoms (d/db conn) :avet :urbit/resource)
+
+;;; PULL
+(d/pull-many (d/db conn) '[*] (mapv :e (d/datoms (d/db conn) :avet :urbit/resource)))
+
+;;; Pull all resources in another way
+
+(d/q '[:find (pull ?rid [*])
+       :where
+       [?rid :urbit/resource]]
+     (d/db conn))
+
+
+(d/q '[:find (pull ?r [:metadata/title {:graph/group [:metadata/title]} :urbit/resource])
+       :where
+       [?r :urbit/resource]]
+     (d/db conn))
+
+(d/q '[:find (pull ?r [*])
+       :where
+       [?r :urbit/resource]]
+     (d/db conn))
 
 (d/q '[:find ?group ?title
        :where
@@ -111,3 +153,11 @@
        [?e :graph/group ?g]
        [?g :metadata/title ?group]]
      (d/db conn))
+
+
+(let [db (d/db conn)]
+  (d/entid db [:urbit/resource :dopzod/urbit-help]))
+
+;;; All entities referring to resource
+(let [db (d/db conn)]
+  (d/pull db '[{:graph/_resource [*]}] (d/entid db [:urbit/resource :dopzod/urbit-help])))
