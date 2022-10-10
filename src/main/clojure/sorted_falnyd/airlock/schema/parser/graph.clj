@@ -86,3 +86,15 @@
                   :graph.resource/name name
                   :graph.resource/ship [:urbit/ship ship]}) ks)})
 
+(defmethod parse-graph-update :remove-posts [[_ {:keys [remove-posts]}]]
+  {:urbit.airlock/response :urbit.airlock.graph.update/remove-posts
+   :indices
+   (let [{:keys [indices resource]} remove-posts
+         {:keys [ship name]} resource]
+     (mapv
+      (fn [ index]
+        {:graph.post/id (str ship "/" name index)
+         :graph/resource [:urbit/resource (keyword ship name)]
+         :graph.resource/name name
+         :graph.resource/ship [:urbit/ship ship]})
+      indices))})
