@@ -18,6 +18,9 @@
     datascript/datascript {:mvn/version "1.3.15"}
     ch.qos.logback/logback-classic {:mvn/version "1.2.7"}}
    :jvm-opts ["-Dclojure.tools.logging.factory=clojure.tools.logging.impl/slf4j-factory"]}
+  :membrane
+  {:extra-deps
+   {membrane/membrane {:local/root "../../Projects/membrane"}}}
   :test
   {:extra-paths ["src/test/resources"]
    :extra-deps {org.clojure/test.check {:mvn/version "1.1.0"}

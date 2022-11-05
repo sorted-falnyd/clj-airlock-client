@@ -54,7 +54,7 @@
 (json/read-value (slurp (.body (.get resp))))
 
 (def newest
-  (let [r :migtus-faster-dozzod-rondev/arts-and-entertainment-groups-8727
+  (let [r :sorted-falnyd/beginners-820
         ship (namespace r)
         -name (name r)]
     (api/send! home/client (graph/newest-siblings ship -name 15))))
