@@ -122,6 +122,7 @@
              (filter (comp (methods handle-response) :urbit.airlock/response)))]
   (handle-response conn resp))
 
+(handle-response conn parsing/resp)
 
 ;;; All resources
 (d/datoms (d/db conn) :avet :urbit/resource)
