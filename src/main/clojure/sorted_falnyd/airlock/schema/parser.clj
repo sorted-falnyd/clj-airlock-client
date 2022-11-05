@@ -62,16 +62,16 @@
 (defn decoder
   ([] (decoder [:schema {:registry (reg/master-registry)} "Response"]))
   ([schema]
-   (let [schema (m/schema schema)
-         decoder (m/decoder schema (mt/transformer
-                                    (mt/key-transformer {:decode keyword})))
-         parser (m/parser schema)
-         explainer (m/explainer schema)]
+   (let [-schema (m/schema schema)
+         -decoder (m/decoder -schema (mt/transformer
+                                      (mt/key-transformer {:decode keyword})))
+         -parser (m/parser -schema)
+         -explainer (m/explainer -schema)]
      (fn [x]
-       (let [x (decoder x)
-             ret (parser x)]
+       (let [x (-decoder x)
+             ret (-parser x)]
          (if (identical? :malli.core/invalid ret)
-           (explainer x)
+           (-explainer x)
            ret)))))
   ([schema value]
    ((decoder schema) value)))
