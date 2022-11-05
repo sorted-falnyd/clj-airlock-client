@@ -52,3 +52,11 @@
 (json/read-value (slurp (.body (.get ks))))
 (def resp (api/send! conn (graph/newest-siblings "zod" "my-chat-1686" 15 "")))
 (json/read-value (slurp (.body (.get resp))))
+
+(def newest
+  (let [r :migtus-faster-dozzod-rondev/arts-and-entertainment-groups-8727
+        ship (namespace r)
+        -name (name r)]
+    (api/send! home/client (graph/newest-siblings ship -name 15))))
+
+(def newest-json (json/read-value (slurp (.body (.get newest)))))

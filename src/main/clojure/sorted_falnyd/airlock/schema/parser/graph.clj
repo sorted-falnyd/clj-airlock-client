@@ -44,24 +44,27 @@
 
 (defn parse-graph-node
   [{children :children
-    {:keys [index signatures hash author time-sent contents]} :post
+    {:keys [index signatures hash author time-sent contents] :as post} :post
     {:keys [name ship] :as resource} :resource}]
   (cond->
-      {:graph.post/index index
-       :graph.post/signatures (mapv (fn [{:keys [signature ship life]}]
-                                      {:graph.post.signature/signature signature
-                                       :graph.post.signature/ship ship
-                                       :graph.post.signature/life life})
-                                    signatures)
-       :graph.post/contents (mapv parse-graph-contents contents)
-       :graph.post/author [:urbit/ship author]
-       :graph.post/time-sent time-sent}
+      (if (string? post)
+        {:graph.post/tombstone :graph.post/tombstone}
+        {:graph.post/index index
+         :graph.post/signatures (mapv (fn [{:keys [signature ship life]}]
+                                        {:graph.post.signature/signature signature
+                                         :graph.post.signature/ship ship
+                                         :graph.post.signature/life life})
+                                      signatures)
+         :graph.post/contents (mapv parse-graph-contents contents)
+         :graph.post/author [:urbit/ship author]
+         :graph.post/time-sent time-sent})
     children (assoc :graph.post/children children)
     hash (assoc :graph.post/hash hash)
-    resource (assoc :graph.post/id (str ship "/" name index)
-                    :graph/resource [:urbit/resource (keyword ship name)]
-                    :graph.resource/name name
-                    :graph.resource/ship [:urbit/ship ship])))
+    resource (->
+              (cond-> index (assoc :graph.post/id (str ship "/" name index)))
+              (assoc :graph/resource [:urbit/resource (keyword ship name)]
+                     :graph.resource/name name
+                     :graph.resource/ship [:urbit/ship ship]))))
 
 (defmethod parse-graph-update :add-nodes [[_ {:keys [add-nodes]}]]
   {:urbit.airlock/response :urbit.airlock.graph.update/add-nodes

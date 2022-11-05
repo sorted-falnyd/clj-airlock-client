@@ -19,6 +19,7 @@
   []
   (-> (json-schema/graph)
       (json-schema/parse-definitions "Graph")
+      (update "Graph.Post" (fn [s] [:or s :string])) ;;; tombstone?
       (assoc "Graph.Resource" [:map [:name :string] [:ship :string]]
              "Graph.Mark" :string
              "Graph.Index" :string
