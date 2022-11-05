@@ -19,3 +19,15 @@
            "mark" "graph-update-3"}))
 
 
+(def resp
+  (parser/parse-response
+   (decoder {"json" connecting/newest-json
+             "id" Integer/MAX_VALUE
+             "response" "diff"
+             "mark" "graph-update-3"})))
+
+;;; Important stuff
+
+(=
+ (sort-by :graph.post/time-sent (:nodes resp))
+ (sort-by :graph.post/id (:nodes resp)))
