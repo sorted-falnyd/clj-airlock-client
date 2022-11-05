@@ -190,3 +190,35 @@
      :sorted-falnyd/dm-inbox)
 
 (d/pull (d/db conn) '[{:graph/_resource [*]}] (d/entid (d/db conn) [:urbit/resource :sorted-falnyd/dm-inbox]))
+
+;;; Pull posts in resource group by query
+
+(d/q '[:find (pull ?e [:graph.post/author :graph.post/time-sent :graph.post/contents])
+       :in $ ?resource
+       :where
+       [?rid :urbit/resource ?resource]
+       [?e :graph/resource ?rid]
+       ]
+     (d/db conn)
+     :sorted-falnyd/beginners-820)
+
+(d/q '[:find (pull ?e [*])
+       :in $ ?resource
+       :where
+       [?rid :urbit/resource ?resource]
+       [?e :graph/resource ?rid]
+       ]
+     (d/db conn)
+     :sorted-falnyd/beginners-820)
+
+;;; Pull posts by index access. ~4x Faster?
+
+(let [db (d/db conn)]
+  (d/entid db [:urbit/resource :sorted-falnyd/beginners-820]))
+
+(let [db (d/db conn)]
+  (->> [:urbit/resource :sorted-falnyd/beginners-820]
+       (d/entid db)
+       (d/datoms db :avet :graph/resource)
+       (mapv :e)
+       (d/pull-many db '[{:graph.post/author [:urbit/ship]} :graph.post/contents :graph.post/time-sent])))
