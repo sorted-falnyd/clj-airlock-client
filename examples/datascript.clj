@@ -7,7 +7,8 @@
    [clojure.core.async :as a]
    [sorted-falnyd.airlock.schema.parser :as parser]
    [fipp.edn :refer [pprint] :rename {pprint fipp}]
-   [datascript.core :as d]))
+   [datascript.core :as d]
+   [clojure.java.io :as io]))
 
 (comment
   ;;; either
@@ -141,10 +142,18 @@
        [?r :urbit/resource]]
      (d/db conn))
 
-(d/q '[:find (pull ?r [*])
+(d/q '[:find [(pull ?r [* {:graph/group [:urbit/resource]}]) ...]
        :where
        [?r :urbit/resource]]
      (d/db conn))
+
+(d/q '[:find (pull ?e [* {:graph/_group [*]}])
+       :where
+       [?e :graph/group ?e]]
+     (d/db conn))
+
+(d/pull (d/db conn) '[{:graph/_group [*]}] 7)
+
 
 (d/q '[:find ?group ?title
        :where
@@ -161,3 +170,23 @@
 ;;; All entities referring to resource
 (let [db (d/db conn)]
   (d/pull db '[{:graph/_resource [*]}] (d/entid db [:urbit/resource :dopzod/urbit-help])))
+
+
+(let [db (d/db conn)]
+  (d/datoms db :aevt :graph/group))
+
+(let [db (d/db conn)]
+  (d/pull-many db '[{:graph/resource [*]}] (map :e (d/datoms db :aevt :graph/group))))
+
+
+(d/pull (d/db conn) '[*] 1)
+
+(d/q '[:find ?e
+       :in $ ?resource
+       :where
+       [?rid :urbit/resource ?resource]
+       [?e :graph/resource ?rid]]
+     (d/db conn)
+     :sorted-falnyd/dm-inbox)
+
+(d/pull (d/db conn) '[{:graph/_resource [*]}] (d/entid (d/db conn) [:urbit/resource :sorted-falnyd/dm-inbox]))
