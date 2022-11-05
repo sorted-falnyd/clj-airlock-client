@@ -1,4 +1,6 @@
-(ns sorted-falnyd.airlock.schema.parser.graph)
+(ns sorted-falnyd.airlock.schema.parser.graph
+  (:require
+   [sorted-falnyd.airlock.schema.parser.urbit :refer [parse-resource]]))
 
 (defmulti parse-graph-update first)
 
@@ -26,8 +28,19 @@
 
 (defmulti parse-graph-reference first)
 
+(defn parse-graph-ref [{:keys [index group graph]}]
+  (let [group (parse-resource group)
+        graph (parse-resource graph)
+        ship (namespace graph) name (name graph)
+        id (str ship "/" name index)]
+    {:graph/resource [:urbit/resource graph]
+     :graph/group [:urbit/resource group]
+     :graph.resource/name name
+     :graph.resource/ship [:urbit/ship ship]
+     :graph.post/id id}))
+
 (defmethod parse-graph-reference :Graph.GraphReference [[_ {:keys [graph]}]]
-  {:graph.post.content/reference graph
+  {:graph.post.content/reference (parse-graph-ref graph)
    :graph.post.content/type :graph.post.content.type/graph-reference})
 
 (defmethod parse-graph-reference :Graph.AppReference [[_ {:keys [app]}]]
